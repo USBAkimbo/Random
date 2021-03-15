@@ -1,5 +1,6 @@
 - name: Upgrade switch firmware
   hosts: test
+  serial: 1
   gather_facts: no
 
   tasks:

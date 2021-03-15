@@ -1,0 +1,11 @@
+[all:vars]
+ansible_connection=ansible.netcommon.network_cli
+
+[test]
+10.10.10.1
+10.10.10.2
+10.10.10.3
+10.10.10.4
+
+[test:vars]
+ftppassword=mypassword
