@@ -1,0 +1,62 @@
+- name: Upgrade switch firmware
+  hosts: test
+  gather_facts: no
+
+  tasks:
+
+    - name: Getting uptime
+      cli_command:
+        command: show ver | i Uptime
+      register: uptime
+
+    - name: Showing uptime
+      debug:
+         msg: "{{uptime.stdout}}"
+
+    - name: Getting current version
+      cli_command:
+        command: show ver | i Cisco IOS XE Software, Version
+      register: currentversion
+
+    - name: Showing current version
+      debug:
+        msg: "{{currentversion.stdout}}"
+
+    - name: Cleaning up unused installation files in case of insufficient space
+      ios_command:
+        commands:
+          - command: install remove inactive
+            prompt: Do you want to remove the above files?
+            answer: y
+      vars:
+        ansible_command_timeout: 1200
+
+    - name: Copying IOS image from FTP to flash
+      ios_command:
+        commands:
+          - command: copy ftp://USERNAME:{{ ftppassword }}@IPADDRESS/IOS/C9200/cat9k_lite_iosxe.16.12.04.SPA.bin flash:cat9k_lite_iosxe.16.12.04.SPA.bin
+            prompt: Destination filename
+            answer: "\r"
+      vars:
+        ansible_command_timeout: 1200
+
+    - name: Check if image is on flash
+      ios_command:
+        commands: "sh flash: | i cat9k_lite_iosxe.16.12.04.SPA.bin"
+        wait_for: result[0] contains "cat9k_lite_iosxe.16.12.04.SPA.bin"
+
+    - name: Installing new image
+      ios_command:
+         commands:
+         - command: install add file flash:cat9k_lite_iosxe.16.12.04.SPA.bin activate commit
+           prompt: Do you want to proceed?
+           answer: y
+      vars:
+        ansible_command_timeout: 3600
+
+    - name: Resetting connection with device
+      meta: reset_connection
+
+    - name: Waiting 20 minutes for the device to reload
+      wait_for_connection:
+        delay: 1200
