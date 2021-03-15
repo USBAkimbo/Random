@@ -1,0 +1,1 @@
+youtube-dl -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $1

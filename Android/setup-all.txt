@@ -1,0 +1,21 @@
+# Reset to clean
+clear
+termux-setup-storage
+rm ~/*.sh
+rm -rf ~/bin
+mkdir ~/bin
+
+# Copy main scripts
+cp /storage/emulated/0/Documents/Scripts/podcast-downloader.sh ~
+cp /storage/emulated/0/Documents/Scripts/update-all-packages.sh ~
+
+# Copy youtube-dl URL opener to bin folder
+cp /storage/emulated/0/Documents/Scripts/termux-url-opener ~/bin
+
+# Make all scripts executable
+chmod +x ~/*.sh
+
+# Install youtube-dl and FFmpeg
+pkg install python
+pkg install ffmpeg
+pip install youtube-dl
