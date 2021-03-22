@@ -1,0 +1,9 @@
+# https://place1.github.io/wg-access-server/2-configuration/
+
+loglevel: info
+storage: sqlite3:///data/db.sqlite3
+wireguard:
+  privateKey: "key from wg genkey"
+dns:
+  upstream:
+    - "10.10.3.1"
