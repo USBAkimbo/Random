@@ -1,3 +1,0 @@
-# Run ansbile playbook using hosts file with username X, ask for ssh and become password and ask for ansible vault password
-
-ansible-playbook -i hosts upgrade-switch-firmware.yml -u username -k -K --ask-vault-pass
