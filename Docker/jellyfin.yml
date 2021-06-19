@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  jellyfin:
+    container_name: jellyfin
+    image: linuxserver/jellyfin
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/jellyfin/config:/config
+      - /var/lib/docker/volumes/storage/tv:/data/tvshows
+      - /var/lib/docker/volumes/storage/films:/data/movies
+      - /var/lib/docker/volumes/storage/Conor/Photos:/data/photos
+    ports:
+      - 8096:8096
+#      - 8920:8920 #optional
+#      - 7359:7359/udp #optional
+#      - 1900:1900/udp #optional

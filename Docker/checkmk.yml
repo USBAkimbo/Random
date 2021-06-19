@@ -1,0 +1,18 @@
+version: '2'
+
+# Last updated
+# 2020-03-01
+
+services:
+  # CheckMK
+  # Runs on port 8181
+  checkmk:
+    container_name: checkmk
+    image: checkmk/check-mk-raw:1.6.0-latest
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/docker/volumes/checkmk/data:/omd/sites
+      - /var/lib/docker/volumes/checkmk/backups:/backups
+    ports:
+      - 8181:5000

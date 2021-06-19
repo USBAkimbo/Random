@@ -1,0 +1,175 @@
+version: '2'
+
+services:
+  # VPN container
+  # All containers force their network traffic through this container
+  gluetun:
+    container_name: gluetun
+    image: qmcgaw/gluetun
+    restart: always
+    network_mode: bridge
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
+      - TZ=Europe/London
+      - VPNSP=mullvad
+      - OPENVPN_USER=XXX
+      - CITY=Stockholm
+      - PROTOCOL=TCP
+      - PORT=443
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /var/lib/docker/volumes/gluetun:/gluetun
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+    ports:
+      # Host:Container/tcp|udp
+      # If not specified it will be TCP
+      # Sonarr
+      - 8989:8989
+      # Radarr
+      - 7878:7878
+      # Jackett
+      - 9117:9117
+      # qBittorrent
+      - 8080:8080
+      # NZBGet
+      - 6789:6789
+      # Bazarr
+      - 6767:6767
+      # JDownloader
+      - 3129:3129
+      # Add more ports here as needed
+
+  # Sonarr
+  # For downloading TV shows
+  # Runs on port 8989
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/sonarr/config:/config
+      - /var/lib/docker/volumes/storage/tv:/tv
+      - /var/lib/docker/volumes/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # Radarr
+  # For downloading movies
+  # Runs on port 7878
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/radarr/config:/config
+      - /var/lib/docker/volumes/storage/films:/movies
+      - /var/lib/docker/volumes/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # Jackett
+  # Indexer for Sonarr and Radarr
+  # Runs on port 9117
+  jackett:
+    container_name: jackett
+    image: linuxserver/jackett
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/jackett/config:/config
+      - /var/lib/docker/volumes/jackett/blackhole:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # qBittorrent
+  # Torrent downloader
+  # Runs on port 8080
+  qbittorrent:
+    container_name: qbittorrent
+    image: linuxserver/qbittorrent
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - WEBUI_PORT=8080
+    volumes:
+      - /var/lib/docker/volumes/qbittorrent/config:/config
+      - /var/lib/docker/volumes/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # NZBGet
+  # For downloading Usenet files
+  # Runs on port 6789
+  nzbget:
+    container_name: nzbget
+    image: linuxserver/nzbget
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/nzbget/config:/config
+      - /var/lib/docker/volumes/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # Bazarr
+  # For downloading subtitles
+  # Runs om port 6767
+  bazarr:
+    container_name: bazarr
+    image: linuxserver/bazarr
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /var/lib/docker/volumes/bazarr/config:/config
+      - /var/lib/docker/volumes/storage/tv:/tv
+      - /var/lib/docker/volumes/storage/films:/movies
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  # JDownloader
+  # For downloading anything
+  # Runs via https://my.jdownloader.org/login.html
+  jdownloader:
+    container_name: jdownloader
+    image: jaymoulin/jdownloader
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - MYJD_USER=XXX
+      - MYJD_PASSWORD=XXX
+      - MYJD_DEVICE_NAME=docker
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - /var/lib/docker/volumes/jdownloader/config:/opt/JDownloader/cfg
+      - /var/lib/docker/volumes/storage/downloads/jdownloader:/opt/JDownloader/Downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false

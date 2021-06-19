@@ -1,0 +1,30 @@
+version: '2'
+
+# Last updated
+# 2020-04-09
+
+services:
+  # PiHole
+  # Runs on port 82
+  # Ensure you disable DNS on the host (assuming Ubuntu) using the below commands
+  # systemctl stop systemd-resolved
+  # systemctl disable systemd-resolved
+  # Access through http://IP/admin
+  pihole:
+    container_name: pihole
+    image: pihole/pihole
+    restart: always
+    environment:
+      TZ: Europe/London
+    volumes:
+      - /var/lib/docker/volumes/pihole/etc:/etc/pihole/
+      - /var/lib/docker/volumes/pihole/dnsmasqd:/etc/dnsmasq.d/
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 82:80/tcp
+      - 444:443/tcp
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
