@@ -37,8 +37,6 @@ services:
       - 8080:8080
       # NZBGet
       - 6789:6789
-      # Bazarr
-      - 6767:6767
       # JDownloader
       - 3129:3129
       # Add more ports here as needed
@@ -133,24 +131,6 @@ services:
     volumes:
       - /var/lib/docker/volumes/nzbget/config:/config
       - /var/lib/docker/volumes/storage/downloads:/downloads
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-
-  # Bazarr
-  # For downloading subtitles
-  # Runs om port 6767
-  bazarr:
-    container_name: bazarr
-    image: linuxserver/bazarr
-    restart: always
-    network_mode: service:gluetun
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /var/lib/docker/volumes/bazarr/config:/config
-      - /var/lib/docker/volumes/storage/tv:/tv
-      - /var/lib/docker/volumes/storage/films:/movies
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
