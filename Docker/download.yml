@@ -5,7 +5,6 @@ services:
   # All containers force their network traffic through this container
   gluetun:
     container_name: gluetun
-#    image: qmcgaw/gluetun:v3.24.0
     image: qmcgaw/gluetun
     restart: always
     network_mode: bridge
@@ -16,6 +15,15 @@ services:
       - PGID=1000
       - TZ=Europe/London
       - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
+      - FIREWALL_OUTBOUND_SUBNETS=10.10.3.0/24
+
+#       WireGuard
+      - VPNSP=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=XXX
+      - WIREGUARD_ADDRESS=XXXX
+      - COUNTRY=Sweden
+      - CITY=Stockholm
 
 #       OpenVPN
 #      - VPNSP=mullvad
@@ -28,13 +36,7 @@ services:
 #      - OPENVPN_PORT=443
 #      - FIREWALL_VPN_INPUT_PORTS=59085
 
-#       WireGuard
-      - VPNSP=mullvad
-      - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=XXX
-      - WIREGUARD_ADDRESS=XXX
-      - COUNTRY=Sweden
-      - CITY=Stockholm
+
 
     volumes:
       - /var/lib/docker/volumes/gluetun:/gluetun
@@ -51,12 +53,11 @@ services:
       - 9117:9117
       # qBittorrent
       - 8080:8080
-      # NZBGet
-      - 6789:6789
+
       # JDownloader
       - 3129:3129
-      # Firefox
-      - 3001:3000
+      # Bazarr
+      - 6767:6767
       # Add more ports here as needed
 
 
@@ -144,26 +145,6 @@ services:
 
 
 
-  # NZBGet
-  # For downloading Usenet files
-  # Runs on port 6789
-  nzbget:
-    container_name: nzbget
-    image: linuxserver/nzbget
-    restart: always
-    network_mode: service:gluetun
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    volumes:
-      - /var/lib/docker/volumes/nzbget/config:/config
-      - /var/lib/docker/volumes/storage/downloads:/downloads
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-
-
-
   # JDownloader
   # For downloading anything
   # Runs via https://my.jdownloader.org/login.html
@@ -173,8 +154,8 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-      - MYJD_USER=XXX
-      - MYJD_PASSWORD=XXX
+      - MYJD_USER=77cla77@gmail.com
+      - MYJD_PASSWORD=XXXX
       - MYJD_DEVICE_NAME=docker
       - PUID=1000
       - PGID=1000
@@ -186,19 +167,21 @@ services:
 
 
 
-  # Firefox
-  # Web browser behind VPN
-  # Runs on port 3001
-  #firefox:
-  #  container_name: firefox
-  #  image: ghcr.io/linuxserver/firefox
-  #  restart: always
-  #  network_mode: service:gluetun
-  #  shm_size: "1gb"
-  #  environment:
-  #    - PUID=1000
-  #    - PGID=1000
-  #  volumes:
-  #    - /var/lib/docker/volumes/firefox/config:/config
-  #  labels:
-  #    - com.centurylinklabs.watchtower.enable=false
+  # Bazarr
+  # For downloading subtitles
+  # Runs via port 6767
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /var/lib/docker/volumes/bazarr/config:/config
+      - /var/lib/docker/volumes/storage/films:/movies
+      - /var/lib/docker/volumes/storage/tv:/tv
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
