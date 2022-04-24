@@ -1,21 +1,18 @@
 version: '2'
 
-# Last updated
-# 2020-03-01
-
 services:
   # Filebrowser
   # For web management of files
-  # Runs on port 80
+  # Runs on port 81
   # To ensure the DB containing your login persists through a rebuild, run the below on the container host
-  # mkdir /var/lib/docker/volumes/filebrowser/
-  # touch /var/lib/docker/volumes/filebrowser/filebrowser.db
+  # mkdir /opt/dockervolumes/filebrowser/
+  # touch /opt/dockervolumes/filebrowser/filebrowser.db
   filebrowser:
     container_name: filebrowser
     image: filebrowser/filebrowser
     restart: always
     volumes:
-      - /var/lib/docker/volumes:/srv
-      - /var/lib/docker/volumes/filebrowser/filebrowser.db:/database.db
+      - /opt/dockervolumes:/srv
+      - /opt/dockervolumes/filebrowser/filebrowser.db:/database.db
     ports:
       - 81:80

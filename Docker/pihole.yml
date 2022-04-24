@@ -1,8 +1,5 @@
 version: '2'
 
-# Last updated
-# 2020-04-09
-
 services:
   # PiHole
   # Runs on port 82
@@ -17,14 +14,19 @@ services:
     environment:
       TZ: Europe/London
     volumes:
-      - /var/lib/docker/volumes/pihole/etc:/etc/pihole/
-      - /var/lib/docker/volumes/pihole/dnsmasqd:/etc/dnsmasq.d/
+      - /opt/dockervolumes/pihole/etc:/etc/pihole/
+      - /opt/dockervolumes/pihole/dnsmasqd:/etc/dnsmasq.d/
     ports:
-      - 53:53/tcp
-      - 53:53/udp
+      - 10.10.3.1:53:53/tcp
+      - 10.10.3.1:53:53/udp
       - 67:67/udp
       - 82:80/tcp
       - 444:443/tcp
     dns:
       - 127.0.0.1
       - 1.1.1.1
+      - 1.0.0.1
+      - 8.8.8.8
+      - 8.8.4.4
+    cap_add:
+     - NET_ADMIN

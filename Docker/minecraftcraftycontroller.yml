@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  crafty:
+    container_name: crafty
+    image: crafty
+    restart: on-failure
+    ports:
+      - 8000:8000
+      - 25565:25565
+    volumes:
+      - /opt/minecraft/docker/minecraft_servers:/minecraft_servers
+      - /opt/minecraft/docker/db:/crafty_db
+      - /opt/minecraft/docker/server-backups:/crafty_web/backups
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London

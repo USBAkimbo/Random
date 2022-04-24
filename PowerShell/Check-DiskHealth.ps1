@@ -5,7 +5,7 @@
 # 77cla77@gmail.com
 
 # Description
-# Monitors the physical disks on a Windows device and alerts if there's any disk failures
+# Used by Checkmk to monitor the physical disks on a Windows device and alert if there's any disk failures
 
 # Get all the disks
 $Disks = Get-PhysicalDisk | Select-Object FriendlyName,HealthStatus,SerialNumber

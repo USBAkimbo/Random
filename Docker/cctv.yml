@@ -1,0 +1,16 @@
+version: "2"
+services:
+  shinobi:
+    container_name: shinobi
+    image: shinobisystems/shinobi:dev
+    restart: unless-stopped
+    volumes:
+      - /root/cctv/config:/config
+      - /root/cctv/customAutoLoad:/home/Shinobi/libs/customAutoLoad
+      - /cctv/database:/var/lib/mysql
+      - /cctv/videos:/home/Shinobi/videos
+      - /cctv/plugins:/home/Shinobi/plugins
+      - /dev/shm/Shinobi/streams:/dev/shm/streams
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 80:8080

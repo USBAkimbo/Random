@@ -1,9 +1,9 @@
 version: '2'
 services:
-    watchtower:
-        container_name: watchtower
-        image: containrrr/watchtower
-        restart: always
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        command: --interval 30
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 86400

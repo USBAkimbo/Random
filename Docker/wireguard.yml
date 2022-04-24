@@ -1,31 +1,26 @@
-version: 2
-
-# Last updated
-# 2021-03-22
-
-# Wireguard Access Server
-# Web UI on port 8000
-# UDP port 51820 needs exposing on the firewall for the VPN to work
-# Read the docs to ensure you set the hostname for internet access and so you set the private key
-# https://place1.github.io/wg-access-server/2-configuration/
-
+version: "2.1"
 services:
-  wg-access-server:
+  wireguard:
+    image: ghcr.io/linuxserver/wireguard
     container_name: wireguard
-    image: place1/wg-access-server
-    restart: unless-stopped
-    volumes:
-      - /var/lib/docker/volumes/wireguard/data:/data
-      - /var/lib/docker/volumes/wireguard/config/config.yaml:/config.yaml
-    ports:
-      - 8000:8000/tcp
-      - 51820:51820/udp
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
+      - SYS_MODULE
     environment:
-      WG_ADMIN_USERNAME: "admin"
-      WG_ADMIN_PASSWORD: "password"
-      WG_WIREGUARD_PRIVATE_KEY: "privatekey"
-      WG_DNS_UPSTREAM: "10.10.3.1"
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - SERVERURL=mydomain.com
+      - SERVERPORT=51820 #optional
+      - PEERS=5 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.10.11.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+    volumes:
+      - /wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped

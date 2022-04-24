@@ -1,8 +1,0 @@
-[all:vars]
-ansible_connection=network_cli
-
-[vpn]
-10.10.10.1
-
-[test:vars]
-ftppassword=mypassword
