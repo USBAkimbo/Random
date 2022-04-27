@@ -136,8 +136,8 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-      - MYJD_USER=77cla77@gmail.com
-      - MYJD_PASSWORD=Xb3XbnMTkXuRf20rppZs
+      - MYJD_USER=XXXX
+      - MYJD_PASSWORD=XXXX
       - MYJD_DEVICE_NAME=docker
       - PUID=1000
       - PGID=1000
