@@ -4,4 +4,8 @@
 - The update all packages does what it says
 
 # Usage
-- Run "setup-all.txt" in Termux
+- Run the below in Termux
+
+```
+curl https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/setup.sh | bash
+```
