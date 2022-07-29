@@ -15,7 +15,7 @@ yt-dlp -f "best[height<=1080]" -o "/storage/emulated/0/Download/%(title)s.%(ext)
 else
 
 if [ "$n" == '3' ]; then
-yt-dlp -o "/storage/emulated/0/Download" $url
+yt-dlp -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 fi
 fi
 fi
