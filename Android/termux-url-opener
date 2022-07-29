@@ -1,20 +1,22 @@
 #!/bin/bash
 clear
 url=$1
-echo "1) Download YouTube video as 720p"
-echo "2) Download YouTube video as 1080p"
-echo "3) Download video from any site"
-read n
 
-if [ "$n" == '1' ]; then
+options+="1) Download YouTube video as 720p"
+options+="2) Download YouTube video as 1080p"
+options+="3) Download video from any site"
+
+method=$(termux-dialog radio -v "$options" -t "Choose download method:")
+
+if [ "$method" == "1) Download YouTube video as 720p" ]; then
 yt-dlp -f "best[height<=720]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
-if [ "$n" == '2' ]; then
+if [ "$method" == "2) Download YouTube video as 1080p" ]; then
 yt-dlp -f "best[height<=1080]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
-if [ "$n" == '3' ]; then
+if [ "$method" == "3) Download video from any site" ]; then
 yt-dlp -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 fi
 fi
