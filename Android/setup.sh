@@ -15,7 +15,7 @@ wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-ur
 mv termux-url-opener ~/bin/termux-url-opener
 
 # Make all scripts executable
-chmod +x ~/bin/*.sh
+chmod +x ~/bin/*
 chmod +x ~/*.sh
 
 # Install yt-dlp, FFmpeg and nmap
