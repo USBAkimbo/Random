@@ -1,7 +1,7 @@
 # Reset to clean
 clear
 cd ~
-rm ~/*.sh
+rm -rf *
 rm -rf ~/bin
 mkdir ~/bin
 
@@ -11,7 +11,8 @@ wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/music-dow
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/update-all-packages.sh
 
 # Download yt-dlp URL opener to bin folder
-wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener -o ~/bin/termux-url-opener
+wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener
+mv termux-url-opener ~/bin/termux-url-opener
 
 # Make all scripts executable
 chmod +x ~/bin/*.sh
