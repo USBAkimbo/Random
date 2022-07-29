@@ -1,12 +1,11 @@
 clear
-echo Podcast Downloader
+echo PKA Downloader
 echo
-echo Version Version 2021-10-13
+echo Version 2022-02-11
 echo
 
 # User input
-read -p "Enter the podcast name: " podcast
-read -p "Enter the podcast artist: " artist
+read -p "Enter the podcast name (PKA or PKN): " podcast
 read -p "Enter the episode number: " epnum
 read -p "Paste the YouTube video URL: " youtube
 
@@ -21,7 +20,7 @@ yt-dlp -f bestaudio $youtube
 
 # Tag podcast name, episode number, compress it to 32kbps, change audio channel to mono and output as an MP3
 echo ===== Processing podcast =====
-ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="$artist" -b:a 32k -ac 1 "$podcast $epnum.mp3"
+ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
 
 # Move processed podcast to podcast directory
 echo ===== Moving podcast  =====

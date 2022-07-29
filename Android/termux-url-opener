@@ -1,1 +1,21 @@
-youtube-dl -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $1
+#!/bin/bash
+clear
+url=$1
+echo "1) Download YouTube video as 720p"
+echo "2) Download YouTube video as 1080p"
+echo "3) Download video from any site"
+read n
+
+if [ "$n" == '1' ]; then
+yt-dlp -f "best[height<=720]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+else
+
+if [ "$n" == '2' ]; then
+yt-dlp -f "best[height<=1080]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+else
+
+if [ "$n" == '3' ]; then
+yt-dlp -o "/storage/emulated/0/Download" $url
+fi
+fi
+fi
