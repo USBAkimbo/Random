@@ -1,7 +1,7 @@
 # Reset to clean
 clear
 cd ~
-rm -rf *
+rm -rf *.*
 rm -rf ~/bin
 mkdir ~/bin
 
