@@ -2,22 +2,28 @@
 clear
 url=$1
 
-options+="1) Download YouTube video as 720p"
-options+="2) Download YouTube video as 1080p"
-options+="3) Download video from any site"
+options+="Download YouTube video as 720p,"
+options+="Download YouTube video as 1080p,"
+options+="Download video from any site,"
+options+="Nothing"
 
 method=$(termux-dialog radio -v "$options" -t "Choose download method:")
 
-if [ "$method" == "1) Download YouTube video as 720p" ]; then
+if [ "$method" == "Download YouTube video as 720p," ]; then
 yt-dlp -f "best[height<=720]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
-if [ "$method" == "2) Download YouTube video as 1080p" ]; then
+if [ "$method" == "Download YouTube video as 1080p," ]; then
 yt-dlp -f "best[height<=1080]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
-if [ "$method" == "3) Download video from any site" ]; then
+if [ "$method" == "Download video from any site," ]; then
 yt-dlp -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+
+if [ "$method" == "Nothing" ]; then
+exit
+
+fi
 fi
 fi
 fi
