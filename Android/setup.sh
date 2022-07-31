@@ -2,6 +2,7 @@
 clear
 cd ~
 rm -rf *.*
+rm -rf .profile*
 rm -rf ~/bin
 mkdir ~/bin
 
