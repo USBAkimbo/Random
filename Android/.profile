@@ -1,8 +1,8 @@
 # Quit by just running "e"
 alias e=exit
 
-# Make ll do an ls -la
-alias ll="ls -la"
+# Make ll list all files in human readable format
+alias ll="ls -lha"
 
 # Get public IP
 alias myip='curl ipinfo.io/ip'
