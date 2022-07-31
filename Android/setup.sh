@@ -9,6 +9,7 @@ mkdir ~/bin
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/podcast-downloader.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/music-downloader.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/update-all-packages.sh
+wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/.profile
 
 # Download yt-dlp URL opener to bin folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener
