@@ -11,9 +11,9 @@ wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/podcast-d
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/music-downloader.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/update-all-packages.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/.profile
-
-# Download yt-dlp URL opener to bin folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener
+
+# Move termux-url-opener to bin folder
 mv termux-url-opener ~/bin/termux-url-opener
 
 # Make all scripts executable

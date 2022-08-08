@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   # VPN container
@@ -16,6 +16,7 @@ services:
       - TZ=Europe/London
       - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
       - FIREWALL_OUTBOUND_SUBNETS=10.10.3.0/24
+      - FIREWALL_VPN_INPUT_PORTS=XXXX
       - VPNSP=mullvad
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=XXXX
@@ -23,7 +24,7 @@ services:
       - COUNTRY=Sweden
       - CITY=Stockholm
     volumes:
-      - /var/lib/docker/volumes/gluetun:/gluetun
+      - /opt/dockervolumes/gluetun:/gluetun
     labels:
       - com.centurylinklabs.watchtower.enable=false
     ports:
@@ -33,16 +34,12 @@ services:
       - 8989:8989
       # Radarr
       - 7878:7878
-      # Jackett
-      #- 9117:9117
       # Prowlarr
       - 9696:9696
       # qBittorrent
       - 8080:8080
       # JDownloader
       - 3129:3129
-      # Bazarr
-      - 6767:6767
       # Add more ports here as needed
 
 
@@ -60,9 +57,9 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /var/lib/docker/volumes/sonarr/config:/config
-      - /var/lib/docker/volumes/storage/tv:/tv
-      - /var/lib/docker/volumes/storage/downloads:/downloads
+      - /opt/dockervolumes/sonarr/config:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/downloads:/downloads
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
@@ -81,9 +78,9 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /var/lib/docker/volumes/radarr/config:/config
-      - /var/lib/docker/volumes/storage/films:/movies
-      - /var/lib/docker/volumes/storage/downloads:/downloads
+      - /opt/dockervolumes/radarr/config:/config
+      - /mnt/storage/films:/movies
+      - /mnt/storage/downloads:/downloads
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
@@ -102,9 +99,11 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - /var/lib/docker/volumes/prowlarr/config:/config
+      - /opt/dockervolumes/prowlarr/config:/config
     labels:
       - com.centurylinklabs.watchtower.enable=false
+
+
 
   # qBittorrent
   # Torrent downloader
@@ -120,8 +119,8 @@ services:
       - TZ=Europe/London
       - WEBUI_PORT=8080
     volumes:
-      - /var/lib/docker/volumes/qbittorrent/config:/config
-      - /var/lib/docker/volumes/storage/downloads:/downloads
+      - /opt/dockervolumes/qbittorrent/config:/config
+      - /mnt/storage/downloads:/downloads
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
@@ -142,28 +141,7 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /var/lib/docker/volumes/jdownloader/config:/opt/JDownloader/cfg
-      - /var/lib/docker/volumes/storage/downloads/jdownloader:/opt/JDownloader/Downloads
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-
-
-
-  # Bazarr
-  # For downloading subtitles
-  # Runs via port 6767
-  bazarr:
-    container_name: bazarr
-    image: lscr.io/linuxserver/bazarr
-    restart: always
-    network_mode: service:gluetun
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-    volumes:
-      - /var/lib/docker/volumes/bazarr/config:/config
-      - /var/lib/docker/volumes/storage/films:/movies
-      - /var/lib/docker/volumes/storage/tv:/tv
+      - /opt/dockervolumes/jdownloader/config:/opt/JDownloader/cfg
+      - /mnt/storage/downloads/jdownloader:/opt/JDownloader/Downloads
     labels:
       - com.centurylinklabs.watchtower.enable=false
