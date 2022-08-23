@@ -16,13 +16,12 @@ services:
       - TZ=Europe/London
       - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
       - FIREWALL_OUTBOUND_SUBNETS=10.10.3.0/24
-      - FIREWALL_VPN_INPUT_PORTS=XXXX
+      - FIREWALL_VPN_INPUT_PORTS=55676
       - VPNSP=mullvad
       - VPN_TYPE=wireguard
+      - SERVER_CITIES=Zurich
       - WIREGUARD_PRIVATE_KEY=XXXX
-      - WIREGUARD_ADDRESS=XXXX
-      - COUNTRY=Sweden
-      - CITY=Stockholm
+      - WIREGUARD_ADDRESSES=XXXX
     volumes:
       - /opt/dockervolumes/gluetun:/gluetun
     labels:
@@ -38,8 +37,6 @@ services:
       - 9696:9696
       # qBittorrent
       - 8080:8080
-      # JDownloader
-      - 3129:3129
       # Add more ports here as needed
 
 
@@ -49,7 +46,7 @@ services:
   # Runs on port 8989
   sonarr:
     container_name: sonarr
-    image: linuxserver/sonarr
+    image: lscr.io/linuxserver/sonarr
     restart: always
     network_mode: service:gluetun
     environment:
@@ -70,7 +67,7 @@ services:
   # Runs on port 7878
   radarr:
     container_name: radarr
-    image: linuxserver/radarr
+    image: lscr.io/linuxserver/radarr
     restart: always
     network_mode: service:gluetun
     environment:
@@ -110,7 +107,7 @@ services:
   # Runs on port 8080
   qbittorrent:
     container_name: qbittorrent
-    image: linuxserver/qbittorrent
+    image: lscr.io/linuxserver/qbittorrent
     restart: always
     network_mode: service:gluetun
     environment:
@@ -121,27 +118,5 @@ services:
     volumes:
       - /opt/dockervolumes/qbittorrent/config:/config
       - /mnt/storage/downloads:/downloads
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-
-
-
-  # JDownloader
-  # For downloading anything
-  # Runs via https://my.jdownloader.org/login.html
-  jdownloader:
-    container_name: jdownloader
-    image: jaymoulin/jdownloader
-    restart: always
-    network_mode: service:gluetun
-    environment:
-      - MYJD_USER=XXXX
-      - MYJD_PASSWORD=XXXX
-      - MYJD_DEVICE_NAME=docker
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /opt/dockervolumes/jdownloader/config:/opt/JDownloader/cfg
-      - /mnt/storage/downloads/jdownloader:/opt/JDownloader/Downloads
     labels:
       - com.centurylinklabs.watchtower.enable=false
