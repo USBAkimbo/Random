@@ -3,7 +3,7 @@ version: '2'
 services:
   jellyfin:
     container_name: jellyfin
-    image: linuxserver/jellyfin
+    image: lscr.io/linuxserver/jellyfin
     restart: always
     environment:
       - PUID=1000
