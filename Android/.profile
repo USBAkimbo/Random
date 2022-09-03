@@ -14,4 +14,4 @@ alias myip='curl ipinfo.io/ip'
 alias dl="cd /storage/emulated/0/Download"
 
 # Run ReVanced
-alias ReVanced="cd ~ && ./revanced-builder.sh update && ./revanced-builder.sh"
+alias revanced="cd ~ && ./revanced-builder.sh update && ./revanced-builder.sh"
