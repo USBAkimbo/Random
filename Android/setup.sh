@@ -1,7 +1,9 @@
 # Reset to clean
 clear
 cd ~
-rm -rf *.*
+rm podcast-downloader.sh
+rm music-downloader.sh
+rm update-all-packages.sh
 rm .profile*
 rm -rf ~/bin
 mkdir ~/bin
