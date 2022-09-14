@@ -24,7 +24,7 @@ ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -a
 
 # Move processed podcast to podcast directory
 echo ===== Moving podcast  =====
-mv "$podcast $epnum.mp3" /storage/emulated/0/Documents/Podcasts
+mv "$podcast $epnum.mp3" "/storage/emulated/0/Google Drive/Music/Podcasts/Sync"
 
 # Delete temp folder
 echo ===== Deleting temp folder =====

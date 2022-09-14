@@ -18,7 +18,7 @@ yt-dlp -f bestaudio -x --audio-format mp3 --audio-quality 0 --add-metadata --emb
 
 # Move song to music directory with new name
 echo ===== Moving song =====
-mv * "/storage/emulated/0/Documents/Music"
+mv * "/storage/emulated/0/Google Drive/Music/Songs"
 
 # Delete temp folder
 echo ===== Deleting temp folder =====
