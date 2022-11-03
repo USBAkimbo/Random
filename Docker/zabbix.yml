@@ -1,0 +1,76 @@
+version: '3.3'
+
+services:
+  # Zabbix database
+  zabbix-db:
+    container_name: zabbix-db
+    image: mysql
+    restart: always
+    volumes:
+      - /opt/dockervolumes/zabbix/zabbix-db:/var/lib/mysql:rw
+    command:
+      - mysqld
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - MYSQL_ROOT_PASSWORD=zabbix
+    stop_grace_period: 1m
+
+  # Zabbix server
+  zabbix-server:
+    container_name: zabbix-server
+    image: zabbix/zabbix-server-mysql:ubuntu-6.2-latest
+    restart: always
+    ports:
+      - 10051:10051
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/dbscripts:/var/lib/zabbix/dbscripts:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/export:/var/lib/zabbix/export:rw
+      - /opt/dockervolumes/zabbix/zabbix-server/modules:/var/lib/zabbix/modules:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/enc:/var/lib/zabbix/enc:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      - /opt/dockervolumes/zabbix/zabbix-server/mibs:/var/lib/zabbix/mibs:ro
+    environment:
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=zabbix
+      - DB_SERVER_HOST=zabbix-db
+    depends_on:
+      - zabbix-db
+    stop_grace_period: 30s
+    sysctls:
+      - net.ipv4.ip_local_port_range=1024 65000
+      - net.ipv4.conf.all.accept_redirects=0
+      - net.ipv4.conf.all.secure_redirects=0
+      - net.ipv4.conf.all.send_redirects=0
+
+  # Zabbix web UI
+  zabbix-web:
+    container_name: zabbix-web
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-6.2-latest
+    restart: always
+    ports:
+      - 8282:8080
+      #- 8443:8443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/dockervolumes/zabbix/zabbix-web/nginx:/etc/ssl/nginx:ro
+      - /opt/dockervolumes/zabbix/zabbix-web/modules/:/usr/share/zabbix/modules/:ro
+    environment:
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix
+      - DB_SERVER_HOST=zabbix-db
+      - ZBX_SERVER_HOST=zabbix-server
+      - ZBX_SERVER_NAME=Zabbix Docker
+      - PHP_TZ=Europe/London
+    depends_on:
+      - zabbix-db
+      - zabbix-server
+    stop_grace_period: 10s
