@@ -36,7 +36,7 @@ services:
       # Prowlarr
       - 9696:9696
       # qBittorrent
-      - 8080:8080
+      - 8182:8080
       # Add more ports here as needed
 
 
