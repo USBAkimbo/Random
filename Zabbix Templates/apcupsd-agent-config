@@ -1,0 +1,6 @@
+Add the below to the Zabbix agent config on your physical server running apcupsd
+
+########### apcupsd #############################
+UserParameter=UPSStatus,apcaccess | awk '/^(STATUS).*:/ { print $3 }'
+UserParameter=UPSBcharge,apcaccess | awk '/^(BCHARGE).*:/ { print $3 }'
+UserParameter=UPSTimeleft,apcaccess | awk '/^(TIMELEFT).*:/ { print $3 }'

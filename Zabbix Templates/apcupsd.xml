@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.2</version>
+    <date>2022-12-01T23:30:22Z</date>
+    <template_groups>
+        <template_group>
+            <uuid>3dcd5bbe90534f9e8eb5c2d53756af63</uuid>
+            <name>Templates/Power</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>c58b37339837422e9a73a50aeca84130</uuid>
+            <template>apcupsd</template>
+            <name>apcupsd</name>
+            <groups>
+                <group>
+                    <name>Templates/Power</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>1e96ba9e5aaf412a85ba6729de92db20</uuid>
+                    <name>APC UPS Battery Charge</name>
+                    <key>UPSBcharge</key>
+                    <value_type>FLOAT</value_type>
+                    <triggers>
+                        <trigger>
+                            <uuid>ad725187db7d42898177ebfadbee7cef</uuid>
+                            <expression>last(/apcupsd/UPSBcharge)&lt;80</expression>
+                            <name>APC UPS Battery Charge below 80%</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                        <trigger>
+                            <uuid>47577069f53b4aee88fef7923d2fba76</uuid>
+                            <expression>last(/apcupsd/UPSBcharge)&lt;90</expression>
+                            <name>APC UPS Battery Charge below 90%</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>d3d76a834a0b4639878c8a415fd02f17</uuid>
+                    <name>APC UPS Status</name>
+                    <key>UPSStatus</key>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <triggers>
+                        <trigger>
+                            <uuid>53429734a8394d63a937bddff04a6909</uuid>
+                            <expression>last(/apcupsd/UPSStatus)&lt;&gt;&quot;ONLINE&quot;</expression>
+                            <name>APC UPS Status is not &quot;ONLINE&quot;</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>090013fb182842cc953e98696eab2516</uuid>
+                    <name>APC UPS Time Left</name>
+                    <key>UPSTimeleft</key>
+                    <value_type>FLOAT</value_type>
+                    <triggers>
+                        <trigger>
+                            <uuid>d8a0134781444b689598df2d8fbc427a</uuid>
+                            <expression>last(/apcupsd/UPSTimeleft)&lt;10</expression>
+                            <name>APC UPS Time Left below 10 minutes</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                        <trigger>
+                            <uuid>5633afb84efe4fe8b02036c36b55bb91</uuid>
+                            <expression>last(/apcupsd/UPSTimeleft)&lt;15</expression>
+                            <name>APC UPS Time Left below 15 minutes</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+</zabbix_export>

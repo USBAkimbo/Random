@@ -1,4 +1,9 @@
-version: '3'
+version: '3.8'
+
+# Connect to reverse proxy network
+networks:
+  proxy:
+    external: true
 
 services:
   # VPN container
@@ -7,7 +12,6 @@ services:
     container_name: gluetun
     image: qmcgaw/gluetun
     restart: always
-    network_mode: bridge
     cap_add:
       - NET_ADMIN
     environment:
@@ -16,16 +20,55 @@ services:
       - TZ=Europe/London
       - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
       - FIREWALL_OUTBOUND_SUBNETS=10.10.3.0/24
-      - FIREWALL_VPN_INPUT_PORTS=55676
+      - FIREWALL_VPN_INPUT_PORTS=55289
       - VPNSP=mullvad
       - VPN_TYPE=wireguard
-      - SERVER_CITIES=Zurich
-      - WIREGUARD_PRIVATE_KEY=XXXX
-      - WIREGUARD_ADDRESSES=XXXX
+      - SERVER_CITIES=Malmö
+      - WIREGUARD_PRIVATE_KEY=XXXXXXXXX
+      - WIREGUARD_ADDRESSES=10.67.166.9/32
     volumes:
       - /opt/dockervolumes/gluetun:/gluetun
     labels:
+      # Disable auto updates (done through daily compose file update)
       - com.centurylinklabs.watchtower.enable=false
+      # Enable Traefik reverse proxy
+      - traefik.enable=true
+      # Sonarr
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.yourdomain.com`)
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.tls.certresolver=cloudflare
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - traefik.http.routers.sonarr.service=sonarr
+      # Radarr
+      - traefik.http.routers.radarr.rule=Host(`radarr.yourdomain.com`)
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.tls.certresolver=cloudflare
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+      - traefik.http.routers.radarr.service=radarr
+      # Prowlarr
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.yourdomain.com`)
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - traefik.http.routers.prowlarr.service=prowlarr
+      # qBittorrent
+      - traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.yourdomain.com`)
+      - traefik.http.routers.qbittorrent.entrypoints=websecure
+      - traefik.http.routers.qbittorrent.tls.certresolver=cloudflare
+      - traefik.http.services.qbittorrent.loadbalancer.server.port=8182
+      - traefik.http.routers.qbittorrent.service=qbittorrent
+      # Deluge
+      - traefik.http.routers.deluge.rule=Host(`deluge.yourdomain.com`)
+      - traefik.http.routers.deluge.entrypoints=websecure
+      - traefik.http.routers.deluge.tls.certresolver=cloudflare
+      - traefik.http.services.deluge.loadbalancer.server.port=8112
+      - traefik.http.routers.deluge.service=deluge
+      # Bazarr
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.yourdomain.com`)
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.tls.certresolver=cloudflare
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - traefik.http.routers.bazarr.service=bazarr
     ports:
       # Host:Container/tcp|udp
       # If not specified it will be TCP
@@ -37,13 +80,14 @@ services:
       - 9696:9696
       # qBittorrent
       - 8182:8080
+      # Deluge
+      - 8112:8112
+      # Bazarr
+      - 6767:6767
       # Add more ports here as needed
+    networks:
+      - proxy
 
-
-
-  # Sonarr
-  # For downloading TV shows
-  # Runs on port 8989
   sonarr:
     container_name: sonarr
     image: lscr.io/linuxserver/sonarr
@@ -60,11 +104,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
-
-
-  # Radarr
-  # For downloading movies
-  # Runs on port 7878
   radarr:
     container_name: radarr
     image: lscr.io/linuxserver/radarr
@@ -81,11 +120,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
-
-
-  # Prowlarr
-  # Indexer for Sonarr and Radarr
-  # Runs on port 9696
   prowlarr:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:develop
@@ -100,11 +134,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
-
-
-  # qBittorrent
-  # Torrent downloader
-  # Runs on port 8080
   qbittorrent:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent
@@ -114,9 +143,40 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=8182
     volumes:
       - /opt/dockervolumes/qbittorrent/config:/config
       - /mnt/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  deluge:
+    container_name: deluge
+    image: lscr.io/linuxserver/deluge
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /opt/dockervolumes/deluge/config:/config
+      - /mnt/storage/downloads:/downloads
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+  bazarr:
+    container_name: bazarr
+    image: lscr.io/linuxserver/bazarr
+    restart: always
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /opt/dockervolumes/bazarr/config:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/films:/movies
     labels:
       - com.centurylinklabs.watchtower.enable=false
