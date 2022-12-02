@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.2</version>
+    <date>2022-12-01T23:36:20Z</date>
+    <template_groups>
+        <template_group>
+            <uuid>b40249dcdea845a8b1d661ed69a5acd1</uuid>
+            <name>Linux Server Zabbix Agent</name>
+        </template_group>
+        <template_group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
+            <name>Templates</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>ab900107205f48a5a79f6e83aaf610b9</uuid>
+            <template>Template App APT Updates</template>
+            <name>Template App APT Updates</name>
+            <groups>
+                <group>
+                    <name>Linux Server Zabbix Agent</name>
+                </group>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>7e25def970a84995b72a546bdb02c5c5</uuid>
+                    <name>Security Updates</name>
+                    <key>apt.security</key>
+                    <delay>900</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>APT</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>61b656de95544835984db066a375465a</uuid>
+                    <name>Non-Critical Updates</name>
+                    <key>apt.updates</key>
+                    <delay>900</delay>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>APT</value>
+                        </tag>
+                    </tags>
+                </item>
+            </items>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>e2fdafc15f5b4d5da61b2bbdadcb1735</uuid>
+            <expression>last(/Template App APT Updates/apt.security)&gt;0 and last(/Template App APT Updates/apt.updates)&gt;0</expression>
+            <name>{ITEM.LASTVALUE1} security and {ITEM.LASTVALUE2} regular updates on {HOST.NAME}</name>
+            <priority>WARNING</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+        <trigger>
+            <uuid>61d9a47e71914a21ab18499d2fe1f4c2</uuid>
+            <expression>last(/Template App APT Updates/apt.updates)&gt;0 and last(/Template App APT Updates/apt.security)=0</expression>
+            <name>{ITEM.LASTVALUE} regular updates on {HOST.NAME}</name>
+            <priority>INFO</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+        <trigger>
+            <uuid>c1083010fed846a199220a0685a7e998</uuid>
+            <expression>last(/Template App APT Updates/apt.security)&gt;0 and last(/Template App APT Updates/apt.updates)=0</expression>
+            <name>{ITEM.LASTVALUE} security updates on {HOST.NAME}</name>
+            <priority>WARNING</priority>
+            <manual_close>YES</manual_close>
+        </trigger>
+    </triggers>
+    <graphs>
+        <graph>
+            <uuid>372117e5649445cda2fffdee1e748f34</uuid>
+            <name>Pending Updates</name>
+            <graph_items>
+                <graph_item>
+                    <color>199C0D</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>Template App APT Updates</host>
+                        <key>apt.updates</key>
+                    </item>
+                </graph_item>
+                <graph_item>
+                    <sortorder>1</sortorder>
+                    <color>F63100</color>
+                    <calc_fnc>ALL</calc_fnc>
+                    <item>
+                        <host>Template App APT Updates</host>
+                        <key>apt.security</key>
+                    </item>
+                </graph_item>
+            </graph_items>
+        </graph>
+    </graphs>
+</zabbix_export>

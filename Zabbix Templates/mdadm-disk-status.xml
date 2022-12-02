@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.2</version>
+    <date>2022-12-02T00:02:38Z</date>
+    <template_groups>
+        <template_group>
+            <uuid>846977d1dfed4968bc5f8bdb363285bc</uuid>
+            <name>Templates/Operating systems</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>6a061e922e034945a80f37bb3495a0f7</uuid>
+            <template>mdadm</template>
+            <name>mdadm</name>
+            <groups>
+                <group>
+                    <name>Templates/Operating systems</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>6655b95934b3419f948bbb348c76f99e</uuid>
+                    <name>mdadm array status</name>
+                    <key>vfs.file.regmatch[/proc/mdstat,raid]</key>
+                </item>
+                <item>
+                    <uuid>f0f3207352f34dcc9f109654a9172cb7</uuid>
+                    <name>mdadm individual disk status</name>
+                    <key>vfs.file.regmatch[/proc/mdstat,_]</key>
+                </item>
+            </items>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>296588e9b8544238b6d080d5a60d2f54</uuid>
+            <expression>last(/mdadm/vfs.file.regmatch[/proc/mdstat,raid])&gt;0 and last(/mdadm/vfs.file.regmatch[/proc/mdstat,_])&gt;0</expression>
+            <name>Disk issue in mdadm array</name>
+            <priority>DISASTER</priority>
+        </trigger>
+    </triggers>
+</zabbix_export>
