@@ -8,4 +8,4 @@ SendMode Input		; Recommended for new scripts due to its superior speed and reli
 
 ; Type clipboard text
 ; CTRL+SHIFT+V
-^+v::Send {Raw}%Clipboard%
+; ^+v::Send {Raw}%Clipboard%
