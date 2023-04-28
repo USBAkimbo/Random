@@ -13,7 +13,7 @@ cd /storage/emulated/0/Download/podcast-temp-$dt
 
 echo ===== Downloading podcast =====
 # Get YouTube URL from stdin $1
-/home/cla/.local/bin/yt-dlp -f bestaudio $1
+yt-dlp -f bestaudio $1
 
 echo ===== Processing podcast =====
 # Get file name from downloaded file
