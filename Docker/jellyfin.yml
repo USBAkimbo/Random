@@ -13,5 +13,16 @@ services:
       - /opt/dockervolumes/jellyfin/config:/config
       - /mnt/storage/tv:/data/tvshows
       - /mnt/storage/films:/data/movies
+      - /mnt/storage/transcodes:/transcodes
     ports:
       - 8096:8096
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.rule=Host(`jellyfin.domain.com`)
+      - traefik.http.routers.jellyfin.entrypoints=websecure
+      - traefik.http.routers.jellyfin.tls.certresolver=cloudflare
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

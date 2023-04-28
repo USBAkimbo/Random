@@ -1,4 +1,4 @@
-function Restart-GTA {
+function Start-GTAReplayGlitch {
 	
 	# Check if we're running as admin
 	if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -21,7 +21,6 @@ function Restart-GTA {
 		elseif ($Prompt -eq "n") {
 			Write-Host "Exiting"
 			Remove-NetFirewallRule -Name "Block GTA"
-			Get-NetAdapter Ethernet | Enable-NetAdapter -Confirm:$false
 			throw "Exiting"
 			$InputReceived = $true
 		}
@@ -30,54 +29,40 @@ function Restart-GTA {
 		}
 	}
 		
-	Write-Host ""
 	Write-Host -ForegroundColor Yellow "Wait until your character hands over the bag and the message 'SAVING FAILED' has popped up in the bottom left"
 	Write-Host ""
 
 	$InputReceived = $false
 	while (-not $InputReceived) {
-		$Prompt = Read-Host -Prompt "Are you ready to disconnect your network adapter? (y/n)"
+		$Prompt = Read-Host -Prompt "Are you ready to restart GTA? (y/n)"
 		Write-Host ""
 		if ($Prompt -eq "y") {
-			Write-Host -ForegroundColor DarkGreen "Disabling NIC"
-			Get-NetAdapter Ethernet | Disable-NetAdapter -Confirm:$false
-			$InputReceived = $true
-		}
-		elseif ($Prompt -eq "n") {
-			Write-Host "Exiting"
-			Remove-NetFirewallRule -Name "Block GTA"
-			Get-NetAdapter Ethernet | Enable-NetAdapter -Confirm:$false
-			throw "Exiting"
-			$InputReceived = $true
-		}
-		else {
-			Write-Host -ForegroundColor Red "Invalid input, please enter 'y' or 'n'"
-		}
-	}
-
-	Write-Host ""
-	Write-Host -ForegroundColor Yellow "Wait until you get a disconnection message and you get kicked back into single player"
-	Write-Host ""
-	Write-Host -ForegroundColor Yellow "If this doesn't happen, wait for the cutscene to end then pause and go into the Creator"
-	Write-Host ""
-	Write-Host -ForegroundColor Yellow "This will fail and will kick you back to single player"
-	Write-Host ""
-
-	$InputReceived = $false
-	while (-not $InputReceived) {
-		$Prompt = Read-Host -Prompt "Are you back in single player? (y/n)"
-		Write-Host ""
-		if ($Prompt -eq "y") {
-			Write-Host -ForegroundColor DarkGreen "Enabling NIC and removing firewall rule"
+			Write-Host -ForegroundColor DarkGreen "Restarting GTA and removing firewall rule"
 			Write-Host ""
+			Get-Process "GTA*","Rockstar*","SocialClub*","Launcher*" | Stop-Process -Force
 			Remove-NetFirewallRule -Name "Block GTA"
-			Get-NetAdapter Ethernet | Enable-NetAdapter -Confirm:$false
+
+			$Seconds = 10
+			Write-Host "Sleeping for $Seconds seconds"
+			Write-Host ""
+
+			1..$Seconds | ForEach-Object {
+				$Percent = $_ * 100 / $Seconds
+				Write-Progress -Activity "Sleeping for $Seconds seconds" -Status "$($Seconds - $_) seconds remaining" -PercentComplete $Percent 
+				Start-Sleep -Seconds 1
+				}
+			
+			Write-Host -ForegroundColor DarkGreen "GTA has been killed and the firewall rule has been removed"
+			Write-Host ""
+			Write-Host -ForegroundColor DarkGreen "Starting GTA"
+			Write-Host ""
+			Start-Process "C:\Users\Conor\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Steam\Grand Theft Auto V.url"
+
 			$InputReceived = $true
 		}
 		elseif ($Prompt -eq "n") {
 			Write-Host "Exiting"
 			Remove-NetFirewallRule -Name "Block GTA"
-			Get-NetAdapter Ethernet | Enable-NetAdapter -Confirm:$false
 			throw "Exiting"
 			$InputReceived = $true
 		}
@@ -85,32 +70,4 @@ function Restart-GTA {
 			Write-Host -ForegroundColor Red "Invalid input, please enter 'y' or 'n'"
 		}
 	}
-
-	Write-Host -ForegroundColor Yellow "All done!"
-	Write-Host ""
-	Write-Host -ForegroundColor Yellow "Now go back into online and the heist should be ready to go again"
-	Write-Host ""
-
 }
-
-
-###
-
-# Old script
-
-#	Write-Host "Killing GTA"
-#	Get-Process "*GTA*","Rockstar*","SocialClub*","Launcher*" | Stop-Process -Force
-#	
-#	$Seconds = 10
-#	Write-Host "Sleeping for $Seconds seconds"
-#	
-#	1..$Seconds | ForEach-Object {
-#	$Percent = $_ * 100 / $Seconds
-#	Write-Progress -Activity "Sleeping for $Seconds seconds" -Status "$($Seconds - $_) seconds remaining" -PercentComplete $Percent 
-#	Start-Sleep -Seconds 1
-#	}
-#	
-#	Write-Host "Starting GTA"
-#	Start-Process "C:\Users\Conor\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Steam\Grand Theft Auto V.url"
-#	
-#}
