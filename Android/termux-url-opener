@@ -11,7 +11,7 @@ read n
 
 
 if [ "$n" == '1' ]; then
-~./pka-downloader.sh $url
+~/pka-downloader.sh $url
 else
 
 if [ "$n" == '2' ]; then
