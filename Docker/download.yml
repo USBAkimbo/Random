@@ -10,7 +10,7 @@ services:
   # All containers force their network traffic through this container
   gluetun:
     container_name: gluetun
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:v3.34
     restart: always
     cap_add:
       - NET_ADMIN
@@ -51,12 +51,12 @@ services:
       - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - traefik.http.routers.prowlarr.service=prowlarr
-      # Deluge
-      - traefik.http.routers.deluge.rule=Host(`deluge.$DOMAIN`)
-      - traefik.http.routers.deluge.entrypoints=websecure
-      - traefik.http.routers.deluge.tls.certresolver=cloudflare
-      - traefik.http.services.deluge.loadbalancer.server.port=8112
-      - traefik.http.routers.deluge.service=deluge
+      # Transmission
+      - traefik.http.routers.transmission.rule=Host(`transmission.$DOMAIN`)
+      - traefik.http.routers.transmission.entrypoints=websecure
+      - traefik.http.routers.transmission.tls.certresolver=cloudflare
+      - traefik.http.services.transmission.loadbalancer.server.port=9091
+      - traefik.http.routers.transmission.service=transmission
       # Bazarr
       - traefik.http.routers.bazarr.rule=Host(`bazarr.$DOMAIN`)
       - traefik.http.routers.bazarr.entrypoints=websecure
@@ -78,8 +78,8 @@ services:
       - 7878:7878
       # Prowlarr
       - 9696:9696
-      # Deluge
-      - 8112:8112
+      # Transmission
+      - 9091:9091
       # Bazarr
       - 6767:6767
       # SABnzbd
@@ -134,18 +134,21 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
-  deluge:
-    container_name: deluge
-    image: lscr.io/linuxserver/deluge
+  transmission:
+    container_name: transmission
+    image: lscr.io/linuxserver/transmission
     restart: always
     network_mode: service:gluetun
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
+      - USER=$TRANSMISSION_ADMIN
+      - PASS=$TRANSMISSION_PASSWORD
     volumes:
-      - /opt/dockervolumes/deluge/config:/config
+      - /opt/dockervolumes/transmission/config:/config
       - /mnt/storage/downloads:/downloads
+      - /mnt/storage/transmission-watch:/watch
     labels:
       - com.centurylinklabs.watchtower.enable=false
 

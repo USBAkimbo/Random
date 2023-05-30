@@ -9,7 +9,6 @@ echo "5) Download 1080p YouTube video"
 echo "6) Download regular video from any site"
 read n
 
-
 if [ "$n" == '1' ]; then
 /data/data/com.termux/files/home/pka-downloader.sh $url
 else

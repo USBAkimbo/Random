@@ -1,29 +1,28 @@
 version: '3.3'
 
 services:
-
   # Zabbix database
   zabbix-db:
     container_name: zabbix-db
     image: mysql
     restart: always
     volumes:
-      - /opt/dockervolumes/zabbix/zabbix-db/mysql:/var/lib/mysql:rw
-      - /opt/dockervolumes/zabbix/zabbix-db/backups:/backups
+      - ${ZABBIX_DATA_PATH}/zabbix-db/mysql:/var/lib/mysql:rw
+      - ${ZABBIX_DATA_PATH}/zabbix-db/backups:/backups
     command:
       - mysqld
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
       - --default-authentication-plugin=mysql_native_password
     environment:
-      - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=zabbix
-      - MYSQL_ROOT_PASSWORD=zabbix
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     stop_grace_period: 1m
-    networks:
-      - proxy
     labels:
       - com.centurylinklabs.watchtower.enable=false
+    networks:
+      - proxy
 
   # Zabbix server
   zabbix-server:
@@ -34,20 +33,19 @@ services:
       - 10051:10051
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/alertscripts:/usr/lib/zabbix/alertscripts:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/externalscripts:/usr/lib/zabbix/externalscripts:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/dbscripts:/var/lib/zabbix/dbscripts:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/export:/var/lib/zabbix/export:rw
-      - /opt/dockervolumes/zabbix/zabbix-server/modules:/var/lib/zabbix/modules:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/enc:/var/lib/zabbix/enc:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/ssh_keys:/var/lib/zabbix/ssh_keys:ro
-      - /opt/dockervolumes/zabbix/zabbix-server/mibs:/var/lib/zabbix/mibs:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/dbscripts:/var/lib/zabbix/dbscripts:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/export:/var/lib/zabbix/export:rw
+      - ${ZABBIX_DATA_PATH}/zabbix-server/modules:/var/lib/zabbix/modules:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/enc:/var/lib/zabbix/enc:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-server/mibs:/var/lib/zabbix/mibs:ro
     environment:
-      #- MYSQL_USER=zabbix
-      #- MYSQL_PASSWORD=zabbix
       - MYSQL_ROOT_USER=root
-      - MYSQL_ROOT_PASSWORD=zabbix
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - DB_SERVER_HOST=zabbix-db
+      - ZBX_STARTPINGERS=${ZBX_STARTPINGERS}
     depends_on:
       - zabbix-db
     stop_grace_period: 30s
@@ -56,10 +54,10 @@ services:
       - net.ipv4.conf.all.accept_redirects=0
       - net.ipv4.conf.all.secure_redirects=0
       - net.ipv4.conf.all.send_redirects=0
-    networks:
-      - proxy
     labels:
       - com.centurylinklabs.watchtower.enable=false
+    networks:
+      - proxy
 
   # Zabbix web UI
   zabbix-web:
@@ -68,14 +66,13 @@ services:
     restart: always
     ports:
       - 8282:8080
-      #- 8443:8443
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /opt/dockervolumes/zabbix/zabbix-web/nginx:/etc/ssl/nginx:ro
-      - /opt/dockervolumes/zabbix/zabbix-web/modules/:/usr/share/zabbix/modules/:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-web/nginx:/etc/ssl/nginx:ro
+      - ${ZABBIX_DATA_PATH}/zabbix-web/modules/:/usr/share/zabbix/modules/:ro
     environment:
-      - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=zabbix
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - DB_SERVER_HOST=zabbix-db
       - ZBX_SERVER_HOST=zabbix-server
       - ZBX_SERVER_NAME=Zabbix Docker
@@ -86,12 +83,16 @@ services:
     stop_grace_period: 10s
     labels:
       - traefik.enable=true
-      - traefik.http.routers.zabbix.rule=Host(`zabbix.mydomain.com`)
+      - traefik.http.routers.zabbix.rule=Host(`zabbix.${DOMAIN}`)
       - traefik.http.routers.zabbix.entrypoints=websecure
       - traefik.http.routers.zabbix.tls.certresolver=cloudflare
+      - traefik.http.services.zabbix.loadbalancer.server.port=8080
+      - traefik.http.routers.zabbix.service=zabbix
       - com.centurylinklabs.watchtower.enable=false
     networks:
       - proxy
+
 networks:
   proxy:
     external: true
+  zabbix:
