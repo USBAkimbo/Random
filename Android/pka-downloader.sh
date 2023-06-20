@@ -8,7 +8,7 @@ echo
 dt=$(date +'%Y-%m-%d--%H-%M-%S')
 
 echo ===== Creating temp folder =====
-mkdir /storage/emulated/0/Download/podcast-temp-$dt
+mkdir -p /storage/emulated/0/Download/podcast-temp-$dt
 cd /storage/emulated/0/Download/podcast-temp-$dt
 
 echo ===== Downloading podcast =====
@@ -24,7 +24,7 @@ epname=$(echo $(ls) | grep -o -E 'PKN [0-9]{3}|PKA [0-9]{3}')
 ffmpeg -i * -metadata title="$epname" -metadata artist="PKA" -b:a 32k -ac 1 "$epname.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
-mv "$epname.mp3" "/storage/emulated/0/Google Drive/Music/Podcasts/Sync"
+mv "$epname.mp3" "/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync"
 
 echo ===== Deleting temp folder =====
 cd ..
