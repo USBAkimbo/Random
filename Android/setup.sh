@@ -1,11 +1,11 @@
 # Reset to clean
 clear
 cd ~
-rm podcast-downloader.sh
-rm pka-downloader.sh
-rm music-downloader.sh
-rm update-all-packages.sh
-rm .profile*
+rm -f podcast-downloader.sh
+rm -f pka-downloader.sh
+rm -f music-downloader.sh
+rm -f update-all-packages.sh
+rm -f .profile*
 rm -rf ~/bin
 mkdir ~/bin
 
