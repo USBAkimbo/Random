@@ -9,7 +9,7 @@ read -p "Paste the YouTube Music URL: " youtube
 
 # Create temp folder and cd to it
 echo ===== Creating temp folder =====
-mkdir /storage/emulated/0/Download/music-temp
+mkdir -p /storage/emulated/0/Download/music-temp
 cd /storage/emulated/0/Download/music-temp
 
 # Download song to temp folder
