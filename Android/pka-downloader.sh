@@ -16,15 +16,21 @@ echo ===== Downloading podcast =====
 yt-dlp -f bestaudio $1
 
 echo ===== Processing podcast =====
-# Get file name from downloaded file
-# For example "PKA 123"
-epname=$(echo $(ls) | grep -o -E 'PKN [0-9]{3}|PKA [0-9]{3}')
+# Get the podcast type from downloaded file
+# If the title contains "PKA" or "Already" then set the episode to PKA, otherwise set it to PKN
+if ls | grep -qiE 'pka|already'
+then podcast=PKA
+else podcast=PKN
+fi
+
+# Set the episode number by getting the first 3 numbers from the file name
+epnum=$(ls | grep -oP '^\D*\K\d{3}')
 
 # Tag podcast name metadata, compress it to 32kbps, change audio channel to mono and output as an MP3
-ffmpeg -i * -metadata title="$epname" -metadata artist="PKA" -b:a 32k -ac 1 "$epname.mp3"
+ffmpeg -i * -metadata title="$podcast" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
-mv "$epname.mp3" "/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync"
+mv "$podcast $epnum.mp3" "/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync"
 
 echo ===== Deleting temp folder =====
 cd ..
