@@ -27,7 +27,7 @@ fi
 epnum=$(ls | grep -oP '^\D*\K\d{3}')
 
 # Tag podcast name metadata, compress it to 32kbps, change audio channel to mono and output as an MP3
-ffmpeg -i * -metadata title="$podcast" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
+ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
 mv "$podcast $epnum.mp3" "/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync"
