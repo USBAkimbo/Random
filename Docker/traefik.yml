@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    restart: unless-stopped
+    environment:
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/dockervolumes/traefik/letsencrypt:/letsencrypt
+      - /opt/dockervolumes/traefik/traefik.yml:/etc/traefik/traefik.yml
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls.certresolver=cloudflare
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.middlewares=strip
+      - traefik.http.middlewares.strip.stripprefix.prefixes=/traefik
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

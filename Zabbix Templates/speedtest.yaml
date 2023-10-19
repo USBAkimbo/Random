@@ -1,0 +1,34 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    - uuid: 9403928832cc42e49b8518c657d905a1
+      template: 'Speed Test'
+      name: 'Speed Test'
+      groups:
+        - name: Templates
+      items:
+        - uuid: 5b7c458147cb480988757fbed113908a
+          name: 'Speed Test - Download'
+          key: speedtest.download
+          delay: 1h
+          value_type: FLOAT
+          units: mbps
+          triggers:
+            - uuid: 5735e25179f54a5f8185ed5072a9ab2b
+              expression: 'last(/Speed Test/speedtest.download)<258'
+              name: 'Download speed lower than SLA'
+              priority: INFO
+        - uuid: 1d87c4d1670149d98690f95df8939a37
+          name: 'Speed Test - Upload'
+          key: speedtest.upload
+          delay: 1h
+          value_type: FLOAT
+          units: mbps
+          triggers:
+            - uuid: 537c4df5c8084247b3fb88783ef9bb40
+              expression: 'last(/Speed Test/speedtest.upload)<18'
+              name: 'Upload speed lower than SLA'
+              priority: INFO

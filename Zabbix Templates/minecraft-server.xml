@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.2</version>
+    <date>2023-01-12T00:26:52Z</date>
+    <template_groups>
+        <template_group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
+            <name>Templates</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>04dafab2cb2b428f9bdbbd459cb4e050</uuid>
+            <template>Minecraft Server</template>
+            <name>Minecraft Server</name>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>c1131f042da9465fa52fa2a5124a0e6b</uuid>
+                    <name>Minecraft server status - Java process</name>
+                    <key>proc.num[java]</key>
+                    <triggers>
+                        <trigger>
+                            <uuid>28b3782fc6b542aab57fa65695a23536</uuid>
+                            <expression>last(/Minecraft Server/proc.num[java])=0</expression>
+                            <name>Minecraft server Java process is not running</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>612958fcc5004dc18b7ad6e3b205c2f5</uuid>
+                    <name>Minecraft server log</name>
+                    <key>vfs.file.contents[/opt/minecraft/logs/latest.log]</key>
+                    <trends>0</trends>
+                    <value_type>LOG</value_type>
+                </item>
+            </items>
+        </template>
+    </templates>
+</zabbix_export>
