@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  deemix:
+    image: registry.gitlab.com/bockiii/deemix-docker
+    container_name: deemix
+    restart: always
+    volumes:
+      - /opt/dockervolumes/deemix/downloads:/downloads
+      - /opt/dockervolumes/deemix/config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+    ports:
+      - 6595:6595
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.deemix.rule=Host(`deemix.${DOMAIN}`)
+      - traefik.http.routers.deemix.entrypoints=websecure
+      - traefik.http.routers.deemix.tls.certresolver=cloudflare
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true

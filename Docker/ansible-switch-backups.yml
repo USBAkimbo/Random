@@ -1,0 +1,17 @@
+version: '3.8'
+
+# Build a container from the Ubuntu image and run the following
+# apt update
+# apt install -y ansible python3-paramiko
+
+# Save the container as "ansible-switch-backups:latest" and run this compose
+
+services:
+  ansible-switch-backups:
+    container_name: ansible-switch-backups
+    image: ansible-switch-backups:latest
+    restart: always
+    volumes:
+      - /opt/dockervolumes/ansible-switch-backups/ansible.cfg:/etc/ansible/ansible.cfg
+      - /opt/dockervolumes/ansible-switch-backups:/backups
+    command: tail -F keepalive

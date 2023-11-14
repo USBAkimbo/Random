@@ -1,0 +1,33 @@
+version: "2.1"
+services:
+  unifi-controller:
+    image: lscr.io/linuxserver/unifi-controller
+    container_name: unifi-controller
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /opt/dockervolumes/unificontroller/config:/config
+    ports:
+      - 8443:8443       # Unifi web admin port
+      - 3478:3478/udp   # Unifi STUN port
+      - 10001:10001/udp # Required for AP discovery
+      - 8080:8080       # Required for device communication
+      #- 1900:1900/udp  # Optional - controller discovery
+      #- 8843:8843      # Optional - Unifi guest portal HTTPS redirect port
+      #- 8880:8880      # Optional - Unifi guest portal HTTP redirect port
+      #- 6789:6789      # Optional - For mobile throughput test
+      #- 5514:5514/udp  # Optional - Remote syslog port
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.unificontroller.rule=Host(`unificontroller.${DOMAIN}`)
+      - traefik.http.routers.unificontroller.entrypoints=websecure
+      - traefik.http.routers.unificontroller.tls.certresolver=cloudflare
+      - traefik.http.services.unificontroller.loadbalancer.server.port=8443
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
