@@ -1,0 +1,50 @@
+mqtt:
+  enabled: False
+record:
+  enabled: true
+  retain:
+    days: 30
+    mode: all
+detect:
+  enabled: false
+
+go2rtc:
+  streams:
+    c1: 
+      - "ffmpeg:http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=password#video=copy#audio=copy#audio=opus"
+    c2: 
+      - "ffmpeg:http://10.10.8.12/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=password#video=copy#audio=copy#audio=opus"
+    c3: 
+      - "ffmpeg:http://10.10.8.13/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=password#video=copy#audio=copy#audio=opus"
+    c4: 
+      - "ffmpeg:http://10.10.8.14/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password=password#video=copy#audio=copy#audio=opus"
+
+cameras:
+  c1:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/c1?video=copy&audio=aac
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+  c2:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/c2?video=copy&audio=aac
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+  c3:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/c3?video=copy&audio=aac
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+  c4:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/c4?video=copy&audio=aac
+          input_args: preset-rtsp-restream
+          roles:
+            - record

@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  frigate:
+    container_name: frigate
+    privileged: true # this may not be necessary for all setups
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    shm_size: "256mb" # update for your cameras based on calculation above
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/dockervolumes/frigate/config/config.yml:/config/config.yml
+      - /mnt/cctv/frigate:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "8554:8554"     # RTSP feeds
+      - "8555:8555/tcp" # WebRTC over tcp
+      - "8555:8555/udp" # WebRTC over udp
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.cctv.rule=Host(`cctv.${DOMAIN}`)
+      - traefik.http.routers.cctv.entrypoints=websecure
+      - traefik.http.routers.cctv.tls.certresolver=cloudflare
+      - traefik.http.services.cctv.loadbalancer.server.port=5000
+    networks:
+      - proxy
+networks:
+  proxy:
+    external: true
