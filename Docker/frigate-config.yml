@@ -27,6 +27,8 @@ cameras:
           input_args: preset-rtsp-restream
           roles:
             - record
+      output_args:
+        record: preset-record-generic-audio-aac
   c2:
     ffmpeg:
       inputs:
@@ -34,6 +36,8 @@ cameras:
           input_args: preset-rtsp-restream
           roles:
             - record
+      output_args:
+        record: preset-record-generic-audio-aac
   c3:
     ffmpeg:
       inputs:
@@ -41,6 +45,8 @@ cameras:
           input_args: preset-rtsp-restream
           roles:
             - record
+      output_args:
+        record: preset-record-generic-audio-aac
   c4:
     ffmpeg:
       inputs:
@@ -48,3 +54,5 @@ cameras:
           input_args: preset-rtsp-restream
           roles:
             - record
+      output_args:
+        record: preset-record-generic-audio-aac
