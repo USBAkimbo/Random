@@ -18,6 +18,11 @@ services:
       - "8554:8554"     # RTSP feeds
       - "8555:8555/tcp" # WebRTC over tcp
       - "8555:8555/udp" # WebRTC over udp
+    environment:
+      FRIGATE_C1_PASS: ${FRIGATE_C1_PASS}
+      FRIGATE_C2_PASS: ${FRIGATE_C2_PASS}
+      FRIGATE_C3_PASS: ${FRIGATE_C3_PASS}
+      FRIGATE_C4_PASS: ${FRIGATE_C4_PASS}
     labels:
       - traefik.enable=true
       - traefik.http.routers.cctv.rule=Host(`cctv.${DOMAIN}`)
