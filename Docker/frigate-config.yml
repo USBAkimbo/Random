@@ -1,32 +1,35 @@
 mqtt:
   enabled: false
-detect:
-  enabled: false
-birdseye:
-  enabled: false
+
 record:
   enabled: true
   retain:
     days: 30
     mode: all
 
-go2rtc:
-  streams:
-    c1: 
-      - "ffmpeg:http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C1_PASS}"
-    c2: 
-      - "ffmpeg:http://10.10.8.12/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C2_PASS}"
-    c3: 
-      - "ffmpeg:http://10.10.8.13/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C3_PASS}"
-    c4: 
-      - "ffmpeg:http://10.10.8.14/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C4_PASS}"
+birdseye:
+  mode: continuous
+
+detectors:
+  ov:
+    type: openvino
+    device: AUTO
+    model:
+      path: /openvino-model/ssdlite_mobilenet_v2.xml
+
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
 
 cameras:
   c1-side:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/c1?video=copy&audio=copy
-          input_args: preset-rtsp-restream
+        - path: http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C1_PASS}
+          input_args: preset-http-reolink
           roles:
             - record
         - path: http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=admin&password={FRIGATE_C1_PASS}
@@ -39,8 +42,8 @@ cameras:
   c2-garden:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/c2?video=copy&audio=copy
-          input_args: preset-rtsp-restream
+        - path: http://10.10.8.12/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C2_PASS}
+          input_args: preset-http-reolink
           roles:
             - record
         - path: http://10.10.8.12/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=admin&password={FRIGATE_C2_PASS}
@@ -53,8 +56,8 @@ cameras:
   c3-garage:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/c3?video=copy&audio=copy
-          input_args: preset-rtsp-restream
+        - path: http://10.10.8.13/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C3_PASS}
+          input_args: preset-http-reolink
           roles:
             - record
         - path: http://10.10.8.13/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=admin&password={FRIGATE_C3_PASS}
@@ -67,8 +70,8 @@ cameras:
   c4-front:
     ffmpeg:
       inputs:
-        - path: rtsp://127.0.0.1:8554/c4?video=copy&audio=copy
-          input_args: preset-rtsp-restream
+        - path: http://10.10.8.14/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C4_PASS}
+          input_args: preset-http-reolink
           roles:
             - record
         - path: http://10.10.8.14/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=admin&password={FRIGATE_C4_PASS}
