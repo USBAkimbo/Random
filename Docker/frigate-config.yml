@@ -10,6 +10,25 @@ record:
 birdseye:
   mode: continuous
 
+detect:
+  width: 2560
+  height: 1920
+
+objects:
+  track:
+    - person
+    - bicycle
+    - car
+    - motorcycle
+    - bird
+    - cat
+    - dog
+    - hat
+    - backpack
+    - umbrella
+    - sports ball
+    - baseball bat
+
 detectors:
   ov:
     type: openvino

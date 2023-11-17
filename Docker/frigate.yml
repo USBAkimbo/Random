@@ -5,7 +5,7 @@ services:
     privileged: true # this may not be necessary for all setups
     restart: unless-stopped
     image: ghcr.io/blakeblackshear/frigate:stable
-    shm_size: "256mb" # update for your cameras based on calculation above
+    shm_size: "512mb" # update for your cameras based on calculation above
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /opt/dockervolumes/frigate/config/config.yml:/config/config.yml
