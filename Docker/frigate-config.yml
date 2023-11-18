@@ -23,11 +23,6 @@ objects:
     - bird
     - cat
     - dog
-    - hat
-    - backpack
-    - umbrella
-    - sports ball
-    - baseball bat
 
 detectors:
   ov:
