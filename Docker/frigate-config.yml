@@ -1,25 +1,19 @@
-# Disable MQTT because I'm not connecting this to Home Assistant
 mqtt:
   enabled: false
 
-# Enable 24/7 recording (mode: all means all clips, not just clips with objects in)
-# Keep 30 days worth of footage (Frigate automatically deletes the oldest footage once space gets extremely low)
 record:
   enabled: true
   retain:
     days: 30
     mode: all
 
-# Set the birdseye view to always show a live stream of the cameras
 birdseye:
   mode: continuous
 
-# Detection area for cameras (all 4 of my Reolink RLC-410 cameras are 2560x1920)
 detect:
-  width: 2560
-  height: 1920
+  width: 640
+  height: 480
 
-# Objects to track from /labelmap.txt
 objects:
   track:
     - person
@@ -30,8 +24,6 @@ objects:
     - cat
     - dog
 
-# Copy and paste from docs to use default OpenVINO
-# https://docs.frigate.video/configuration/detectors/#openvino-detector
 detectors:
   ov:
     type: openvino
@@ -46,22 +38,18 @@ model:
   input_pixel_format: bgr
   labelmap_path: /openvino-model/coco_91cl_bkgr.txt
 
-# Config for each camera
 cameras:
   c1-side:
     ffmpeg:
       inputs:
-        # Record HD stream
         - path: http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_main.bcs&user=admin&password={FRIGATE_C1_PASS}
           input_args: preset-http-reolink
           roles:
             - record
-        # Use low quality and low FPS stream for object detection
         - path: http://10.10.8.11/flv?port=1935&app=bcs&stream=channel0_sub.bcs&user=admin&password={FRIGATE_C1_PASS}
           input_args: preset-http-reolink
           roles:
             - detect
-      # Record audio
       output_args:
         record: preset-record-generic-audio-copy
 
