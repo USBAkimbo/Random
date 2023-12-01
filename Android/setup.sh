@@ -1,5 +1,8 @@
 # Reset to clean
 clear
+
+echo ===== Running setup =====
+
 cd ~
 rm -f podcast-downloader.sh
 rm -f pka-downloader.sh
@@ -32,3 +35,5 @@ chmod +x *.sh
 
 # Setup termux storage
 termux-setup-storage
+
+echo ===== Setup complete! =====
