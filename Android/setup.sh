@@ -9,8 +9,12 @@ rm -f .profile*
 rm -rf ~/bin
 mkdir ~/bin
 
-# Install wget
+# Install yt-dlp, FFmpeg, nmap and wget
+pkg update -y
+pkg upgrade -y
 pkg install wget -y
+pkg install -y python ffmpeg nmap
+yes | pip install yt-dlp
 
 # Download main scripts to home folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/pka-downloader.sh
@@ -25,12 +29,6 @@ mv termux-url-opener ~/bin/termux-url-opener
 # Make all scripts executable
 chmod +x ~/bin/termux-url-opener
 chmod +x *.sh
-
-# Install yt-dlp, FFmpeg and nmap
-pkg update -y
-pkg upgrade -y
-pkg install -y python ffmpeg nmap
-yes | pip install yt-dlp
 
 # Setup termux storage
 termux-setup-storage
