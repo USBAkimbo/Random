@@ -10,11 +10,11 @@ echo "6) Download regular video from any site"
 read n
 
 if [ "$n" == '1' ]; then
-/data/data/com.termux/files/home/pka-downloader.sh $url
+~/pka-downloader.sh $url
 else
 
 if [ "$n" == '2' ]; then
-/data/data/com.termux/files/home/music-downloader.sh $url
+~/music-downloader.sh $url
 else
 
 if [ "$n" == '3' ]; then

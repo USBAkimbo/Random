@@ -3,14 +3,14 @@ clear
 
 echo ===== Running setup =====
 
-cd /storage/emulated/0
+cd ~
 rm -f podcast-downloader.sh
 rm -f pka-downloader.sh
 rm -f music-downloader.sh
 rm -f update-all-packages.sh
 rm -f .profile*
-rm -rf /storage/emulated/0/bin
-mkdir /storage/emulated/0/bin
+rm -rf ~/bin
+mkdir ~/bin
 
 # Install yt-dlp, FFmpeg, nmap and wget
 pkg update -y
@@ -27,10 +27,10 @@ wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/.profile
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener
 
 # Move termux-url-opener to bin folder
-mv termux-url-opener /storage/emulated/0/bin/termux-url-opener
+mv termux-url-opener ~/bin/termux-url-opener
 
 # Make all scripts executable
-chmod +x /storage/emulated/0/bin/termux-url-opener
+chmod +x ~/termux-url-opener
 chmod +x *.sh
 
 # Setup termux storage
