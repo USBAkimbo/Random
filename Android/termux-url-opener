@@ -2,8 +2,8 @@
 clear
 url=$1
 echo "1) Download PKA/PKN"
-echo "2) Download 360p YouTube video"
-echo "3) Download 480p YouTube video"
+echo "2) Extract MP3 from URL"
+echo "3) Download 360p YouTube video"
 echo "4) Download 720p YouTube video"
 echo "5) Download 1080p YouTube video"
 echo "6) Download regular video from any site"
@@ -14,11 +14,11 @@ if [ "$n" == '1' ]; then
 else
 
 if [ "$n" == '2' ]; then
-yt-dlp -f "best[height<=360]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+/data/data/com.termux/files/home/music-downloader.sh $url
 else
 
 if [ "$n" == '3' ]; then
-yt-dlp -f "best[height<=480]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+yt-dlp -f "best[height<=360]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
 if [ "$n" == '4' ]; then
