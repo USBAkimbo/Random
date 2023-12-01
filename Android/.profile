@@ -11,4 +11,4 @@ alias ll="ls -lha"
 alias myip='curl ipinfo.io/ip'
 
 # cd to download folder
-alias dl="cd ~/Download"
+alias dl="cd /storage/emulated/0/Download"

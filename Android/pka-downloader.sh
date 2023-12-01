@@ -8,8 +8,8 @@ echo
 dt=$(date +'%Y-%m-%d--%H-%M-%S')
 
 echo ===== Creating temp folder =====
-mkdir -p ~/Download/podcast-temp-$dt
-cd ~/Download/podcast-temp-$dt
+mkdir -p /storage/emulated/0/Download/podcast-temp-$dt
+cd /storage/emulated/0/Download/podcast-temp-$dt
 
 echo ===== Downloading podcast =====
 # Get YouTube URL from stdin $1
@@ -30,11 +30,11 @@ epnum=$(ls | grep -oP '^\D*\K\d{3}')
 ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
-mv "$podcast $epnum.mp3" "~/Data/Google Drive/Music/Podcasts/Sync"
+mv "$podcast $epnum.mp3" "/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync/"
 
 echo ===== Deleting temp folder =====
 cd ..
-rm -rf ~/Download/podcast-temp-$dt
+rm -rf /storage/emulated/0/Download/podcast-temp-$dt
 
 echo ===== Done! =====
 read -p "Press enter to exit"
