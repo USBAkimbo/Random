@@ -8,7 +8,10 @@ alias e=exit
 alias ll="ls -lha"
 
 # Get public IP
-alias myip='curl ipinfo.io/ip'
+alias myip="curl ipinfo.io/ip"
 
 # cd to download folder
 alias dl="cd /storage/emulated/0/Download"
+
+# Update all packages
+alias update-all="pkg update -y && pkg upgrade -y && apt autoremove -y && pip install -U yt-dlp"
