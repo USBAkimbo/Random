@@ -9,6 +9,9 @@ rm -f .profile*
 rm -rf ~/bin
 mkdir ~/bin
 
+# Install wget
+pkg install wget -y
+
 # Download main scripts to home folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/pka-downloader.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/music-downloader.sh
