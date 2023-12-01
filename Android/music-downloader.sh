@@ -6,8 +6,8 @@ echo
 
 # Create temp folder and cd to it
 echo ===== Creating temp folder =====
-mkdir -p /storage/emulated/0/Download/music-temp
-cd /storage/emulated/0/Download/music-temp
+mkdir -p ~/Download/music-temp
+cd ~/Download/music-temp
 
 # Download song to temp folder from stdin
 echo ===== Downloading song =====
@@ -15,12 +15,12 @@ yt-dlp -f bestaudio -x --audio-format mp3 --audio-quality 0 --add-metadata --emb
 
 # Move song to music directory with new name
 echo ===== Moving song to ~/Download =====
-mv * "/storage/emulated/0/Download"
+mv * "~/Download"
 
 # Delete temp folder
 echo ===== Deleting temp folder =====
 cd ..
-rm -rf /storage/emulated/0/Download/music-temp
+rm -rf ~/Download/music-temp
 
 # End
 echo ===== Done! =====
