@@ -17,8 +17,8 @@ echo ===== Downloading song =====
 yt-dlp -f bestaudio -x --audio-format mp3 --audio-quality 0 --add-metadata --embed-thumbnail -o "%(artist)s - %(title)s.%(ext)s" $youtube
 
 # Move song to music directory with new name
-echo ===== Moving song =====
-mv * "/storage/emulated/0/Google Drive/Music/Songs"
+echo ===== Moving song to ~/Download =====
+mv * "/storage/emulated/0/Download"
 
 # Delete temp folder
 echo ===== Deleting temp folder =====
