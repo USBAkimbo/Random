@@ -22,7 +22,6 @@ yes | pip install yt-dlp
 # Download main scripts to home folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/pka-downloader.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/music-downloader.sh
-wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/update-all-packages.sh
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/.profile
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-url-opener
 
