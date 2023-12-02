@@ -29,7 +29,7 @@ wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/termux-ur
 mv termux-url-opener ~/bin/termux-url-opener
 
 # Make all scripts executable
-chmod +x ~/termux-url-opener
+chmod +x ~/bin/termux-url-opener
 chmod +x *.sh
 
 # Setup termux storage
