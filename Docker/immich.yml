@@ -12,7 +12,6 @@ services:
     depends_on:
       - redis
       - database
-      - typesense
     restart: always
     networks:
       - proxy
@@ -41,7 +40,6 @@ services:
     depends_on:
       - redis
       - database
-      - typesense
     restart: always
     networks:
       - proxy
@@ -66,22 +64,6 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=false
 
-  typesense:
-    container_name: immich_typesense
-    image: typesense/typesense:0.24.0
-    environment:
-      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
-      - TYPESENSE_DATA_DIR=/data
-    logging:
-      driver: none
-    volumes:
-      - ${IMMICH_DATA_PATH}/tsdata:/data
-    restart: always
-    networks:
-      - proxy
-    labels:
-      - com.centurylinklabs.watchtower.enable=false
-
   redis:
     container_name: immich_redis
     image: redis:6.2
@@ -93,7 +75,7 @@ services:
 
   database:
     container_name: immich_postgres
-    image: postgres:14
+    image: tensorchord/pgvecto-rs:pg14-v0.1.11
     env_file:
       - stack.env
     environment:
