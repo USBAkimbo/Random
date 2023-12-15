@@ -1,12 +1,15 @@
+# Turn off MQTT because I'm not using Home Assistant
 mqtt:
   enabled: false
 
+# Keep 24/7 recorded video for 30 days
 record:
   enabled: true
   retain:
     days: 30
     mode: all
 
+# Set the live view to all cameras all the time
 birdseye:
   mode: continuous
 
@@ -25,18 +28,9 @@ objects:
     - dog
 
 detectors:
-  ov:
-    type: openvino
-    device: AUTO
-    model:
-      path: /openvino-model/ssdlite_mobilenet_v2.xml
-
-model:
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
-  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+  coral:
+    device: usb
+    type: edgetpu
 
 cameras:
   c1-side:
