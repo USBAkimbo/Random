@@ -4,13 +4,13 @@ services:
   # Zabbix database
   zabbix-db:
     container_name: zabbix-db
-    image: mysql
+    image: mariadb:10.11.4
     restart: always
     volumes:
-      - ${ZABBIX_DATA_PATH}/zabbix-db/mysql:/var/lib/mysql:rw
+      - ${ZABBIX_DATA_PATH}/zabbix-db/mariadb:/var/lib/mysql:rw
       - ${ZABBIX_DATA_PATH}/zabbix-db/backups:/backups
     command:
-      - mysqld
+      - mariadbd
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
       - --default-authentication-plugin=mysql_native_password
@@ -27,7 +27,7 @@ services:
   # Zabbix server
   zabbix-server:
     container_name: zabbix-server
-    image: zabbix/zabbix-server-mysql:ubuntu-6.2-latest
+    image: zabbix/zabbix-server-mysql:ubuntu-6.4-latest
     restart: always
     ports:
       - 10051:10051
@@ -62,7 +62,7 @@ services:
   # Zabbix web UI
   zabbix-web:
     container_name: zabbix-web
-    image: zabbix/zabbix-web-nginx-mysql:ubuntu-6.2-latest
+    image: zabbix/zabbix-web-nginx-mysql:ubuntu-6.4-latest
     restart: always
     ports:
       - 8282:8080
