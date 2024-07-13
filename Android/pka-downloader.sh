@@ -24,7 +24,7 @@ else podcast=PKN
 fi
 
 # Set the episode number by getting the first 3 numbers from the file name that starts with "$podcast 123"
-epnum=$(ls | grep -oP '\$podcast \K\d{3}')
+epnum=$(ls | grep -oiP '\$podcast \K\d{3}')
 
 # Tag podcast name metadata, compress it to 32kbps, change audio channel to mono and output as an MP3
 ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
