@@ -10,8 +10,8 @@ tempfolder="/storage/emulated/0/Download/podcast-temp-$dt"
 outputfolder="/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync/"
 
 echo ===== Creating temp folder =====
-mkdir -p $tempfolder
-cd $tempfolder
+mkdir -p "$tempfolder"
+cd "$tempfolder"
 
 echo ===== Downloading podcast =====
 # Get YouTube URL from stdin $1
@@ -36,7 +36,7 @@ mv "$podcast $epnum.mp3" "$outputfolder"
 
 echo ===== Deleting temp folder =====
 cd ..
-rm -rf $tempfolder
+rm -rf "$tempfolder"
 
 echo ===== Done! =====
 read -p "Press enter to exit"
