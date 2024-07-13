@@ -32,7 +32,7 @@ epnum=$(ls | grep -oiP "$podcast\s*\K\d+")
 ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -b:a 32k -ac 1 "$podcast $epnum.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
-mv "$podcast $epnum.mp3" $outputfolder
+mv "$podcast $epnum.mp3" "$outputfolder"
 
 echo ===== Deleting temp folder =====
 cd ..
