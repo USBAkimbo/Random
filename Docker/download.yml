@@ -1,6 +1,6 @@
 version: '3.8'
 
-# Connect to reverse proxy network
+# Define reverse proxy network
 networks:
   proxy:
     external: true
@@ -13,80 +13,79 @@ services:
     image: qmcgaw/gluetun
     restart: always
     cap_add:
-    - NET_ADMIN
+      - NET_ADMIN
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
-    - FIREWALL_OUTBOUND_SUBNETS=10.10.4.0/24
-    - FIREWALL_OUTBOUND_SUBNETS=10.10.3.0/24
-    - FIREWALL_VPN_INPUT_PORTS=$FIREWALL_VPN_INPUT_PORTS
-    - VPNSP=mullvad
-    - VPN_TYPE=wireguard
-    - SERVER_CITIES=$SERVER_CITIES
-    - WIREGUARD_PRIVATE_KEY=$WIREGUARD_PRIVATE_KEY
-    - WIREGUARD_ADDRESSES=$WIREGUARD_ADDRESSES
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - FIREWALL_OUTBOUND_SUBNETS=$FIREWALL_OUTBOUND_SUBNETS
+      - FIREWALL_VPN_INPUT_PORTS=$FIREWALL_VPN_INPUT_PORTS
+      - VPNSP=mullvad
+      - VPN_TYPE=wireguard
+      - SERVER_CITIES=$SERVER_CITIES
+      - WIREGUARD_PRIVATE_KEY=$WIREGUARD_PRIVATE_KEY
+      - WIREGUARD_ADDRESSES=$WIREGUARD_ADDRESSES
     volumes:
-    - /opt/dockervolumes/gluetun:/gluetun
+      - /opt/dockervolumes/gluetun:/gluetun
     labels:
-    # Disable auto updates (done through daily compose file update)
-    - com.centurylinklabs.watchtower.enable=false
-    # Enable Traefik reverse proxy
-    - traefik.enable=true
-    # Sonarr
-    - traefik.http.routers.sonarr.rule=Host(`sonarr.$DOMAIN`)
-    - traefik.http.routers.sonarr.entrypoints=websecure
-    - traefik.http.routers.sonarr.tls.certresolver=cloudflare
-    - traefik.http.services.sonarr.loadbalancer.server.port=8989
-    - traefik.http.routers.sonarr.service=sonarr
-    # Radarr
-    - traefik.http.routers.radarr.rule=Host(`radarr.$DOMAIN`)
-    - traefik.http.routers.radarr.entrypoints=websecure
-    - traefik.http.routers.radarr.tls.certresolver=cloudflare
-    - traefik.http.services.radarr.loadbalancer.server.port=7878
-    - traefik.http.routers.radarr.service=radarr
-    # Prowlarr
-    - traefik.http.routers.prowlarr.rule=Host(`prowlarr.$DOMAIN`)
-    - traefik.http.routers.prowlarr.entrypoints=websecure
-    - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
-    - traefik.http.services.prowlarr.loadbalancer.server.port=9696
-    - traefik.http.routers.prowlarr.service=prowlarr
-    # Transmission
-    - traefik.http.routers.transmission.rule=Host(`transmission.$DOMAIN`)
-    - traefik.http.routers.transmission.entrypoints=websecure
-    - traefik.http.routers.transmission.tls.certresolver=cloudflare
-    - traefik.http.services.transmission.loadbalancer.server.port=9091
-    - traefik.http.routers.transmission.service=transmission
-    # Bazarr
-    - traefik.http.routers.bazarr.rule=Host(`bazarr.$DOMAIN`)
-    - traefik.http.routers.bazarr.entrypoints=websecure
-    - traefik.http.routers.bazarr.tls.certresolver=cloudflare
-    - traefik.http.services.bazarr.loadbalancer.server.port=6767
-    - traefik.http.routers.bazarr.service=bazarr
-    # SABnzbd
-    - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.$DOMAIN`)
-    - traefik.http.routers.sabnzbd.entrypoints=websecure
-    - traefik.http.routers.sabnzbd.tls.certresolver=cloudflare
-    - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
-    - traefik.http.routers.sabnzbd.service=sabnzbd
+      # Disable auto updates (done through daily compose file update)
+      - com.centurylinklabs.watchtower.enable=false
+      # Enable Traefik reverse proxy
+      - traefik.enable=true
+      # Sonarr
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.$DOMAIN`)
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.tls.certresolver=cloudflare
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - traefik.http.routers.sonarr.service=sonarr
+      # Radarr
+      - traefik.http.routers.radarr.rule=Host(`radarr.$DOMAIN`)
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.tls.certresolver=cloudflare
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+      - traefik.http.routers.radarr.service=radarr
+      # Prowlarr
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.$DOMAIN`)
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.tls.certresolver=cloudflare
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - traefik.http.routers.prowlarr.service=prowlarr
+      # Transmission
+      - traefik.http.routers.transmission.rule=Host(`transmission.$DOMAIN`)
+      - traefik.http.routers.transmission.entrypoints=websecure
+      - traefik.http.routers.transmission.tls.certresolver=cloudflare
+      - traefik.http.services.transmission.loadbalancer.server.port=9091
+      - traefik.http.routers.transmission.service=transmission
+      # Bazarr
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.$DOMAIN`)
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.tls.certresolver=cloudflare
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - traefik.http.routers.bazarr.service=bazarr
+      # SABnzbd
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.$DOMAIN`)
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.tls.certresolver=cloudflare
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - traefik.http.routers.sabnzbd.service=sabnzbd
     ports:
-    # Host:Container/tcp|udp
-    # If not specified it will be TCP
-    # Sonarr
-    - 8989:8989
-    # Radarr
-    - 7878:7878
-    # Prowlarr
-    - 9696:9696
-    # Transmission
-    - 9091:9091
-    # Bazarr
-    - 6767:6767
-    # SABnzbd
-    - 8686:8080
-    # Add more ports here as needed
+      # Host:Container/tcp|udp
+      # If not specified it will be TCP
+      # Sonarr
+      - 8989:8989
+      # Radarr
+      - 7878:7878
+      # Prowlarr
+      - 9696:9696
+      # Transmission
+      - 9091:9091
+      # Bazarr
+      - 6767:6767
+      # SABnzbd
+      - 8686:8080
+      # Add more ports here as needed
     networks:
-    - proxy
+      - proxy
 
   sonarr:
     container_name: sonarr
@@ -94,15 +93,15 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     volumes:
-    - /opt/dockervolumes/sonarr/config:/config
-    - /mnt/storage/tv:/tv
-    - /mnt/storage/downloads:/downloads
+      - /opt/dockervolumes/sonarr/config:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/downloads:/downloads
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false
 
   radarr:
     container_name: radarr
@@ -110,15 +109,15 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     volumes:
-    - /opt/dockervolumes/radarr/config:/config
-    - /mnt/storage/films:/movies
-    - /mnt/storage/downloads:/downloads
+      - /opt/dockervolumes/radarr/config:/config
+      - /mnt/storage/films:/movies
+      - /mnt/storage/downloads:/downloads
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false
 
   prowlarr:
     container_name: prowlarr
@@ -126,13 +125,13 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     volumes:
-    - /opt/dockervolumes/prowlarr/config:/config
+      - /opt/dockervolumes/prowlarr/config:/config
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false
 
   transmission:
     container_name: transmission
@@ -140,17 +139,17 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
-    - USER=$TRANSMISSION_ADMIN
-    - PASS=$TRANSMISSION_PASSWORD
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - USER=$TRANSMISSION_ADMIN
+      - PASS=$TRANSMISSION_PASSWORD
     volumes:
-    - /opt/dockervolumes/transmission/config:/config
-    - /mnt/storage/downloads:/downloads
-    - /mnt/storage/transmission-watch:/watch
+      - /opt/dockervolumes/transmission/config:/config
+      - /mnt/storage/downloads:/downloads
+      - /mnt/storage/transmission-watch:/watch
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false
 
   bazarr:
     container_name: bazarr
@@ -158,15 +157,15 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     volumes:
-    - /opt/dockervolumes/bazarr/config:/config
-    - /mnt/storage/tv:/tv
-    - /mnt/storage/films:/movies
+      - /opt/dockervolumes/bazarr/config:/config
+      - /mnt/storage/tv:/tv
+      - /mnt/storage/films:/movies
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false
 
   sabnzbd:
     container_name: sabnzbd
@@ -174,12 +173,12 @@ services:
     restart: always
     network_mode: service:gluetun
     environment:
-    - PUID=1000
-    - PGID=1000
-    - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     volumes:
-    - /opt/dockervolumes/sabnzbd/config:/config
-    - /mnt/storage/downloads:/downloads
-    - /mnt/storage/incomplete-downloads:/incomplete-downloads
+      - /opt/dockervolumes/sabnzbd/config:/config
+      - /mnt/storage/downloads:/downloads
+      - /mnt/storage/incomplete-downloads:/incomplete-downloads
     labels:
-    - com.centurylinklabs.watchtower.enable=false
+      - com.centurylinklabs.watchtower.enable=false

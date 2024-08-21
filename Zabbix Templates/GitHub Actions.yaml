@@ -1,0 +1,20 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    - uuid: 796a7d5be99a460a8237d7ec1253ba2c
+      template: 'GitHub Actions'
+      name: 'GitHub Actions'
+      groups:
+        - name: Templates/Applications
+      items:
+        - uuid: 5973d0cdc30e46da9c06498dfa8f9a9b
+          name: 'GitHub Actions Runner service status'
+          key: 'proc.num[runsvc.sh]'
+          triggers:
+            - uuid: 53349c4d6f7e41f7a7f3c51d26c292b7
+              expression: 'last(/GitHub Actions/proc.num[runsvc.sh])<>1'
+              name: 'GitHub Actions Runner service is not running'
+              priority: HIGH
