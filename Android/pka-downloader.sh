@@ -5,42 +5,51 @@ echo Version 2024-09-13
 echo
 
 # Variables
-tempfolder="/storage/emulated/0/Download/podcast-temp-$(date +'%Y-%m-%d--%H-%M-%S')"
-outputfolder="/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync/"
+TEMP_FOLDER="/storage/emulated/0/Download/podcast-temp-$(date +'%Y-%m-%d--%H-%M-%S')"
+OUTPUT_FOLDER="/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync/"
 
 echo ===== Creating temp folder =====
-mkdir -p "$tempfolder"
-cd "$tempfolder"
+mkdir -p "$TEMP_FOLDER"
+cd "$TEMP_FOLDER"
 
 echo ===== Downloading podcast =====
 # Get YouTube URL from stdin $1
 yt-dlp -f bestaudio --write-info-json $1
 
 echo ===== Extracting upload date =====
-# Extract the upload date from the JSON file
-upload_date=$(jq -r '.upload_date' *.info.json)
-upload_date_formatted=$(date -d "$upload_date" +'%Y-%m-%d')
+# Extract the unix timestamp upload date and convert to ISO 8601 date format
+TIMESTAMP=$(jq -r '.timestamp' *.info.json)
+UPLOAD_DATE_ISO8601=$(date -d "@$TIMESTAMP" --iso-8601=seconds)
 
 echo ===== Processing podcast =====
-# Get the podcast type from downloaded file
-# If the title contains "PKA" or "Already (case insensitive) then set the episode to PKA, otherwise set it to PKN
-if ls | grep -qiE 'pka|already'
-    then podcast=PKA
-    else podcast=PKN
+# Get the podcast type from json metadata
+# If the title contains "PKA" or "Already" (case insensitive) then set the episode to PKA, otherwise set it to PKN
+PODCAST_CHECK=$(jq -r '.title' *.json)
+
+if echo $PODCAST_CHECK | grep -qiE 'pka|already'
+    then PODCAST=PKA
+    else PODCAST=PKN
 fi
 
-# Set the episode number by getting the first 3 numbers from the file name from the string "$podcast 123"
-epnum=$(ls | grep -oiP "$podcast\s*\K\d+")
+# Get the episode number by finding the first 3 numbers after the $PODCAST name"
+EP_NUM=$(echo $PODCAST_CHECK | grep -oiP "$PODCAST\s*\K\d+")
 
-# Tag podcast name metadata, compress it to 32kbps, change audio channel to mono, set creation date, and output as an MP3
-ffmpeg -i * -metadata title="$podcast $epnum" -metadata artist="PKA" -metadata date="$upload_date_formatted" -b:a 32k -ac 1 "$podcast $epnum.mp3"
+# Get the file name
+FILENAME=$(ls --ignore=*.json)
+
+# Tag podcast name metadata
+# Set the file creation date to the upload date and time
+# Compress podcast to 32kbps
+# Change audio channel to mono
+# Output as an MP3
+ffmpeg -i "$FILENAME" -metadata title="$PODCAST $EP_NUM" -metadata artist="PKA" -metadata date="$UPLOAD_DATE_ISO8601" -b:a 32k -ac 1 "$PODCAST $EP_NUM.mp3"
 
 echo ===== Moving podcast to podcast folder  =====
-mv "$podcast $epnum.mp3" "$outputfolder"
+mv "$PODCAST $EP_NUM.mp3" "$OUTPUT_FOLDER"
 
 echo ===== Deleting temp folder =====
 cd ..
-rm -rf "$tempfolder"
+rm -rf "$TEMP_FOLDER"
 
 echo ===== Done! =====
 read -p "Press enter to exit"
