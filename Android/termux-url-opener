@@ -18,7 +18,7 @@ if [ "$n" == '2' ]; then
 else
 
 if [ "$n" == '3' ]; then
-yt-dlp -f "best[height<=360]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+yt-dlp -f "bestvideo[height<=360]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
 if [ "$n" == '4' ]; then
