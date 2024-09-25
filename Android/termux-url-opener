@@ -22,11 +22,11 @@ yt-dlp -f "bestvideo[height<=360]+bestaudio" -o "/storage/emulated/0/Download/%(
 else
 
 if [ "$n" == '4' ]; then
-yt-dlp -f "best[height<=720]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+yt-dlp -f "bestvideo[height<=720]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
 if [ "$n" == '5' ]; then
-yt-dlp -f "best[height<=1080]" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+yt-dlp -f "bestvideo[height<=1080]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 else
 
 if [ "$n" == '6' ]; then
