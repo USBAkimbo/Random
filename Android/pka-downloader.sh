@@ -1,12 +1,12 @@
 clear
 echo PKA Downloader
 echo
-echo Version 2024-09-13
+echo Version 2024-10-23
 echo
 
 # Variables
 TEMP_FOLDER="/storage/emulated/0/Download/podcast-temp-$(date +'%Y-%m-%d--%H-%M-%S')"
-OUTPUT_FOLDER="/storage/emulated/0/Data/Google Drive/Music/Podcasts/Sync/"
+OUTPUT_FOLDER="/storage/emulated/0/Sync/Music/Podcasts/PKA"
 
 echo ===== Creating temp folder =====
 mkdir -p "$TEMP_FOLDER"
