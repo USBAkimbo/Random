@@ -54,7 +54,7 @@ local function returnHome() -- Assumes we're at the end of a planting cycle or h
 end
 
 local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 8x8
-    for layer = 1, 10 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared)
+    for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
         for row = 1, 8 do
             for col = 1, 8 do
@@ -79,10 +79,23 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         end
 
         -- We're now at the bottom right of the farm
+        -- This gets us to the starting X,Z position of the current 8x8 layer
+
+        -- Deposit items in water stream
+        turtle.dig()
+        turtle.forward()
+        for i = 1, 5 do
+            turtle.select(i)
+            turtle.place() -- Attempt to place a wood block
+        end
+        turtle.back()
         for i = 1, 14 do
             turtle.select(i)
-            turtle.drop() -- We need to spit out all items into the water stream to be collected by the hopper
+            turtle.drop() -- Spit all items out at the log so they drop nicely into the water stream
         end
+        turtle.forward()
+        turtle.dig() -- Remove the block
+        turtle.back()
 
         -- This gets us to the starting X,Z position of the current 8x8 layer
         turtle.turnRight()
@@ -92,7 +105,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         end
         turtle.turnRight()
 
-        if layer < 10 then -- Move down only if there are more layers to harvest
+        if layer < 11 then -- Move down only if there are more layers to harvest
             turtle.digDown()
             turtle.down()
             turtle.digDown()
@@ -110,7 +123,7 @@ end
 -- The 5th block is the bottom left corner of the 8x8 farm
 
 print("Starting harvest")
-print("Climbing 28 blocks to to max tree height")
+print("Climbing 30 blocks to to max tree height")
 for i = 1, 30 do -- Dig up 30 blocks because Spruce grows to 30 max and this divides into 10 layers of 3 to harvest
     turtle.digUp()
     turtle.up()
