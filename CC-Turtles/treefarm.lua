@@ -168,7 +168,7 @@ while true do
     print("Returned to home")
 
     print("Waiting for trees to grow (60 minutes)")
-    -- sleep(60 * 60) -- Sleep for 60 minutes (60 * 60 seconds)
+    os.sleep(3600) -- 1 hour in seconds
 
     print("Starting harvest")
     print("Climbing 30 blocks to to max tree height")
