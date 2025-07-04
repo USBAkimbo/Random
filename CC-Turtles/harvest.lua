@@ -84,12 +84,12 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         -- Deposit items in water stream
         turtle.dig()
         turtle.forward()
-        for i = 1, 5 do
+        for i = 1, 16 do
             turtle.select(i)
             turtle.place() -- Attempt to place a wood block
         end
         turtle.back()
-        for i = 1, 14 do
+        for i = 1, 16 do
             turtle.select(i)
             turtle.drop() -- Spit all items out at the log so they drop nicely into the water stream
         end
