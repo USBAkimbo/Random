@@ -135,29 +135,34 @@ end
 
 -- Function end --
 
--- We start on top of a chest 5 blocks away from the farm
--- The 4 blocks in front of us have water below
--- The 5th block is the bottom left corner of the 8x8 farm
+-- Main loop starts here
+while true do
+    -- We start on top of a chest 5 blocks away from the farm
+    -- The 4 blocks in front of us have water below
+    -- The 5th block is the bottom left corner of the 8x8 farm
 
-print("Starting harvest")
-print("Climbing 30 blocks to to max tree height")
-for i = 1, 30 do -- Dig up 30 blocks because Spruce grows to 30 max and this divides into 10 layers of 3 to harvest
-    turtle.digUp()
-    turtle.up()
-end
-print("Reached harvesting height")
-print("Moving 5 blocks forward to the start of the farm for harvesting")
-for i = 1, 5 do
-    turtle.dig() -- Dig the block we're about to move onto
-    turtle.forward()
-end
-print("Reached harvesting start position")
+    print("Starting harvest")
+    print("Climbing 30 blocks to to max tree height")
+    for i = 1, 30 do -- Dig up 30 blocks because Spruce grows to 30 max and this divides into 10 layers of 3 to harvest
+        turtle.digUp()
+        turtle.up()
+    end
+    print("Reached harvesting height")
+    print("Moving 5 blocks forward to the start of the farm for harvesting")
+    for i = 1, 5 do
+        turtle.dig() -- Dig the block we're about to move onto
+        turtle.forward()
+    end
+    print("Reached harvesting start position")
 
-print("Starting harvest")
-harvestTrees()
-print("Harvest complete")
+    print("Starting harvest")
+    harvestTrees()
+    print("Harvest complete")
 
-print("Returning home") -- We end up at the planting level, so we just need to go back 5 blocks
-for i = 1, 5 do
-    turtle.back()
+    print("Returning home") -- We end up at the planting level, so we just need to go back 5 blocks
+    for i = 1, 5 do
+        turtle.back()
+    end
+    print("Cycle complete. Starting next cycle in 5 seconds.")
+    sleep(5) -- Small delay before starting the next cycle
 end
