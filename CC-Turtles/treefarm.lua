@@ -9,8 +9,12 @@
 -- How to run
 --
 -- Open the placed mining turtle then paste in these 2 commands
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/harvest.lua har
--- har
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/treefarm.lua treefarm
+-- treefarm
+--
+-- Or if you just want to harvest
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/harvest.lua harvest
+-- harvest
 
 -- Function start --
 
