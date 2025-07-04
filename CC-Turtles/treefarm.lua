@@ -1,12 +1,23 @@
--- Configuration
-local SAPLING_SLOT = 16 -- Inventory slot where saplings are located
+-- Requirements
+--
+-- A mining turtle
+-- Some space
+-- Feed the mining turtle about 4 stacks of charcoal (needs to be full with 20k fuel)
+-- Fill the chest with at least 1 stack of spruce saplings
+-- Must be spruce as we're abusing the 2x2 trees
+--
+-- How to run
+--
+-- Open the placed mining turtle then paste in these 2 commands
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/harvest.lua har
+-- har
 
 -- Function start --
 
 -- Function to plant an 8x8 of saplings
 -- Assumes we have moved 5 blocks from the chest and we're above the bottom left corner of the farm
 local function plantSaplings()
-    turtle.select(SAPLING_SLOT)
+    turtle.select(16)
     for row = 1, 8 do
         for col = 1, 8 do
             turtle.placeDown()
@@ -81,6 +92,12 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         -- We're now at the bottom right of the farm
         -- This gets us to the starting X,Z position of the current 8x8 layer
 
+        -- Refuel using collected wood
+        for i = 1, 16 do
+            turtle.select(i)
+            turtle.refuel()
+        end
+
         -- Deposit items in water stream
         turtle.dig()
         turtle.forward()
@@ -97,7 +114,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         turtle.dig() -- Remove the block
         turtle.back()
 
-        -- This gets us to the starting X,Z position of the current 8x8 layer
+        -- Turn right and dig through the farm to start the next layer
         turtle.turnRight()
         for i = 1, 7 do
             clearBlocks() -- Dig through the farm
@@ -121,6 +138,10 @@ end
 -- We start on top of a chest 5 blocks away from the farm
 -- The 4 blocks in front of us have water below
 -- The 5th block is the bottom left corner of the 8x8 farm
+
+print("Collecting 1 stack of spruce saplings from the starting chest")
+turtle.select(16)
+turtle.suckDown()
 
 print("Moving 5 blocks forward from the chest")
 for i = 1, 5 do
