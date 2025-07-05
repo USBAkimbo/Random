@@ -165,7 +165,7 @@ while true do
 
     print("Returning home")
     returnHome()
-    print("Returned to home")
+    print("Returned home")
 
     print("Waiting for trees to grow (60 minutes)")
     os.sleep(3600) -- 1 hour in seconds
