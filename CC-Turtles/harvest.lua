@@ -139,31 +139,26 @@ end
 
 -- Function end --
 
--- Main loop starts here
-while true do
-    -- We start on top of a chest 5 blocks away from the farm
-    -- The 4 blocks in front of us have water below
-    -- The 5th block is the bottom left corner of the 8x8 farm
+-- We start on top of a chest 5 blocks away from the farm
+-- The 4 blocks in front of us have water below
+-- The 5th block is the bottom left corner of the 8x8 farm
 
-    print("Starting harvest")
-    print("Moving 5 blocks forward to the start of the farm for harvesting")
-    for i = 1, 5 do
-        turtle.dig() -- Dig the block we're about to move onto
-        turtle.forward()
-    end
-    print("Reached harvesting start position")
+print("Starting harvest")
+print("Moving 5 blocks forward to the start of the farm for harvesting")
+for i = 1, 5 do
+    turtle.dig() -- Dig the block we're about to move onto
+    turtle.forward()
+end
+print("Reached harvesting start position")
 
-    print("Starting harvest")
-    harvestTrees()
-    print("Harvest complete")
+print("Starting harvest")
+harvestTrees()
+print("Harvest complete")
 
-    print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
-    for i = 1, 5 do
-        turtle.back()
-    end
-    for i = 1, 30 do
-        turtle.down()
-    end
-    print("Cycle complete. Starting next cycle in 5 seconds.")
-    sleep(5) -- Small delay before starting the next cycle
+print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
+for i = 1, 5 do
+    turtle.back()
+end
+for i = 1, 30 do
+    turtle.down()
 end
