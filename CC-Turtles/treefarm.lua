@@ -11,10 +11,13 @@
 -- Open the placed mining turtle then paste in these 2 commands
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/treefarm.lua treefarm
 -- treefarm
---
--- Or if you just want to harvest
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/harvest.lua harvest
--- harvest
+
+-- What happens?
+-- The starts the harvest by digging 5 blocks forward, then clears the 8x8 space up to 30 blocks
+-- Then it returns to the chest and collects saplings
+-- Saplings are planted
+-- The turtle returns to the top of the chest and sleeps for 1 hour
+-- The turtle loops back to the start
 
 -- Function start --
 
@@ -139,7 +142,28 @@ end
 
 -- Function end --
 
--- Main loop starts here
+-- Run an initial harvest to ensure a clean start
+print("Starting initial harvest")
+print("Moving 5 blocks forward to the start of the farm for harvesting")
+for i = 1, 5 do
+    turtle.dig() -- Dig the block we're about to move onto
+    turtle.forward()
+end
+print("Reached harvesting start position")
+
+print("Starting harvest")
+harvestTrees()
+print("Harvest complete")
+
+print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
+for i = 1, 5 do
+    turtle.back()
+end
+for i = 1, 30 do
+    turtle.down()
+end
+
+-- Loop through planting, waiting and harvesting - loops infinitely so long as there's saplings in the chest and the server doesn't restart
 while true do
     -- We start on top of a chest 5 blocks away from the farm
     -- The 4 blocks in front of us have water below
