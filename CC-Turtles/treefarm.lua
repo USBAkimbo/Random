@@ -126,13 +126,13 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         end
         turtle.turnRight()
 
-        if layer < 11 then -- Move down only if there are more layers to harvest
-            turtle.digDown()
-            turtle.down()
-            turtle.digDown()
-            turtle.down()
-            turtle.digDown()
-            turtle.down()
+        if layer < 11 then -- Move up only if there are more layers to harvest
+            turtle.digUp()
+            turtle.up()
+            turtle.digUp()
+            turtle.up()
+            turtle.digUp()
+            turtle.up()
         end
     end
 end
@@ -171,12 +171,6 @@ while true do
     os.sleep(3600) -- 1 hour in seconds
 
     print("Starting harvest")
-    print("Climbing 30 blocks to to max tree height")
-    for i = 1, 30 do -- Dig up 30 blocks because Spruce grows to 30 max and this divides into 10 layers of 3 to harvest
-        turtle.digUp()
-        turtle.up()
-    end
-    print("Reached harvesting height")
     print("Moving 5 blocks forward to the start of the farm for harvesting")
     for i = 1, 5 do
         turtle.dig() -- Dig the block we're about to move onto
@@ -188,9 +182,12 @@ while true do
     harvestTrees()
     print("Harvest complete")
 
-    print("Returning home") -- We end up at the planting level, so we just need to go back 5 blocks
+    print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
     for i = 1, 5 do
         turtle.back()
+    end
+    for i = 1, 30 do
+        turtle.down()
     end
     print("Cycle complete. Starting next cycle in 5 seconds.")
     sleep(5) -- Small delay before starting the next cycle
