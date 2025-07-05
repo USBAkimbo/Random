@@ -18,4 +18,6 @@ while true do
     turtle.placeDown() -- Re-plant the nether wart
     print("Sleeping for 40 mins") -- https://minecraft.wiki/w/Nether_Wart#Farming - fully grows from planting to harvest every 40960 game ticks (34.133333333333 minutes) on average
     os.sleep(2400)
+    print("Cycle complete")
+
 end
