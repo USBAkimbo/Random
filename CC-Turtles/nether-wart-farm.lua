@@ -1,6 +1,6 @@
 -- Requirements
 --
--- A mining turtle (refuel to max)
+-- A mining turtle (no fuel required)
 -- Soul sand with nether wart planted on it
 --
 -- How to run
