@@ -91,23 +91,6 @@ local function clearBlocks()
     turtle.digDown()
 end
 
-local function returnHome() -- Assumes we're at the end of a planting cycle and are in the bottom right corner of the farm
-    turtle.dig()
-    turtle.forward() -- Move forward 1 to hover over the water
-    turtle.turnRight()
-    for i = 1, 13 do -- Move to the bottom left of the farm
-        turtle.dig()
-        turtle.forward()
-    end
-    turtle.turnLeft() -- Turn to face the chest
-    for i = 1, 4 do
-        turtle.dig()
-        turtle.forward() -- End up back on top of the chest
-    end
-    turtle.turnRight()
-    turtle.turnRight() -- Turn to face the farm
-end
-
 local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
     for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
@@ -225,7 +208,20 @@ while true do
     print("Sapling planting complete")
 
     print("Returning home")
-    returnHome()
+    turtle.dig()
+    turtle.forward() -- Move forward 1 to hover over the water
+    turtle.turnRight()
+    for i = 1, 13 do -- Move to the bottom left of the farm
+        turtle.dig()
+        turtle.forward()
+    end
+    turtle.turnLeft() -- Turn to face the chest
+    for i = 1, 4 do
+        turtle.dig()
+        turtle.forward() -- End up back on top of the chest
+    end
+    turtle.turnRight()
+    turtle.turnRight() -- Turn to face the farm
     print("Returned home")
 
     print("Waiting for trees to grow (10 mins)")
