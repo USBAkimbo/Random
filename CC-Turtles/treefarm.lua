@@ -22,6 +22,10 @@
 -- The turtle loops back to the start
 
 -- Farm map
+
+-- Key
+-- W = Water stream 4 blocks below
+
 -- XX  XX  XX  XX
 -- XX  XX  XX  XX
 --
@@ -141,7 +145,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
 
         -- Turn right and dig through the farm to start the next layer
         turtle.turnRight()
-        for i = 1, 7 do
+        for i = 1, 13 do
             clearBlocks() -- Dig through the farm
             turtle.forward()
         end
