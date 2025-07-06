@@ -111,7 +111,7 @@ end
 local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
     for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
-        for row = 1, 4 do -- 4 rows because we skip 2 air block gaps
+        for row = 1, 8 do -- 8 rows because we skip 2 air block gaps
             for col = 1, 14 do
                 clearBlocks() -- Dig up, forward, down
                 if col < 14 then -- Move forward unless it's the last block in the row
