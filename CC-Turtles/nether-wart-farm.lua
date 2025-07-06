@@ -10,12 +10,10 @@
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/nether-wart-farm.lua startup
 
 while true do
-
     turtle.select(1) -- Select slot 1
-    data = turtle.inspectDown()
-    if data.state.age == 3 then -- Check if age is 3 (fully grown for nether wart)
+    local success, data = turtle.inspectDown() -- Inspect the nether wart
+    if success and data and data.state and data.state.age == 3 then -- If growth state is 3 (max) then harvest and re-plant
         turtle.digDown() -- Collect the nether wart
         turtle.placeDown() -- Re-plant the nether wart
     end
-
 end
