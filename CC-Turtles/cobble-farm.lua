@@ -7,9 +7,9 @@
 --
 -- How to run
 --
--- Open the placed mining turtle then paste in these 2 commands
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/cobble-farm.lua cobble-farm
--- cobble-farm
+-- Open the placed mining turtle then paste in these 2 commands - it will auto start on server restart too
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/cobble-farm.lua startup
+-- startup
 
 while true do
 

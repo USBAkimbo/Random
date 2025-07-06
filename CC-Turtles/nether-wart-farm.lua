@@ -5,9 +5,10 @@
 --
 -- How to run
 --
--- Open the placed mining turtle then paste in these 2 commands
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/nether-wart-farm.lua nether-wart-farm
--- nether-wart-farm
+
+-- Open the placed mining turtle then paste in these 2 commands - it will auto start on server restart too
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/nether-wart-farm.lua startup
+-- startup
 
 -- Loop until we run out of fuel
 while true do
