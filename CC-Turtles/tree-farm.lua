@@ -68,7 +68,7 @@ local function plantSaplings()
             end
         end
 
-        if row < 14 then
+        if row < 4 then
             if row % 2 == 1 then -- Odd rows: right, forward, right
                 turtle.turnRight()
                 turtle.forward()
@@ -118,7 +118,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
                     turtle.forward()
                 end
             end
-            if row < 4 then -- After clearing a row, prepare for the next one within the same layer
+            if row < 8 then -- After clearing a row, prepare for the next one within the same layer
                 if row % 2 == 1 then -- Odd rows: turn right, move forward (to next row), turn right
                     turtle.turnRight()
                     turtle.dig()
