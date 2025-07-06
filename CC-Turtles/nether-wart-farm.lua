@@ -18,4 +18,5 @@ while true do
         turtle.digDown() -- Collect the nether wart
         turtle.placeDown() -- Re-plant the nether wart
     end
+
 end
