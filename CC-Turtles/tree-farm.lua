@@ -102,26 +102,34 @@ local function returnHome() -- Assumes we're at the end of a planting cycle or h
     turtle.turnRight() -- Turn to face the farm
 end
 
+local function clearSpruceTree()
+    for column = 
+
+
 local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
-    for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
+    for layer = 1, 11 do -- 10 layers to cover 30 blocks up (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
-        for row = 1, 14 do
-            for col = 1, 14 do
+        for row = 1, 4 do -- It's a 4x4 of big trees, so we only move 4 rows
+            for col = 1, 4 do -- And we only move 4 columns
                 clearBlocks() -- Dig up, forward, down
-                if col < 14 then -- Move forward unless it's the last block in the row
+                if col < 4 then -- Move forward unless it's the last block in the row
                     turtle.forward()
                 end
             end
-            if row < 14 then -- After clearing a row, prepare for the next one within the same layer
+            if row < 4 then -- After clearing a row, prepare for the next one within the same layer
                 if row % 2 == 1 then -- Odd rows: turn right, move forward (to next row), turn right
                     turtle.turnRight()
-                    turtle.dig()
-                    turtle.forward()
+                    for i = 1, 3 do -- Dig 3 blocks to get into the next tree
+                        turtle.dig()
+                        turtle.forward() -- End up back on top of the chest
+                    end
                     turtle.turnRight()
                 else                 -- Even rows: turn left, move forward (to next row), turn left
                     turtle.turnLeft()
-                    turtle.dig()
-                    turtle.forward()
+                    for i = 1, 3 do -- Dig 3 blocks to get into the next tree
+                        turtle.dig()
+                        turtle.forward() -- End up back on top of the chest
+                    end
                     turtle.turnLeft()
                 end
             end
@@ -228,10 +236,30 @@ while true do
         turtle.dig() -- Dig the block we're about to move onto
         turtle.forward()
     end
-    print("Reached harvesting start position")
+    print("Reached harvesting start position inside the bottom left tree")
 
     print("Starting harvest")
-    harvestTrees()
+    for i = 1, 14 do -- Dig forward 14 blocks
+        clearBlocks()
+        turtle.forward()
+    end
+    turtle.turnRight()
+    turtle.dig()
+    turtle.forward()
+    turtle.turnRight()
+    for i = 1, 14 do -- Dig forward 14 blocks back to the start
+        clearBlocks()
+        turtle.forward()
+    end
+    turtle.turnLeft() -- Move over the 2 block air gap
+    turtle.dig()
+    turtle.forward()
+    turtle.dig()
+    turtle.forward()
+    turtle.dig()
+    turtle.forward()
+    turtle.turnLeft() -- We're now inside the tree, ready to harvest another row
+
     print("Harvest complete")
 
     print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
