@@ -91,23 +91,24 @@ local function clearBlocks()
     turtle.digDown()
 end
 
-local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
-    for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
+local function harvestTrees() -- Assumes we're at the bottom left corner of the 14x14 farm area after moving from the chest into this block
+    for layer = 1, 10 do -- 10 layers to clear up to 30 blocks high (3 blocks per layer)
         print("Clearing layer " .. layer .. "")
-        for row = 1, 8 do -- 8 rows because we skip 2 air block gaps
-            for col = 1, 14 do
-                clearBlocks() -- Dig up, forward, down
-                if col < 14 then -- Move forward unless it's the last block in the row
+        for row = 1, 8 do -- There are 8 rows in total (4 rows of trees + 4 rows of gaps)
+            for i = 1, 14 do -- Clear 14 blocks forward
+                clearBlocks()
+                if i < 14 then
                     turtle.forward()
                 end
             end
-            if row < 8 then -- After clearing a row, prepare for the next one within the same layer
-                if row % 2 == 1 then -- Odd rows: turn right, move forward (to next row), turn right
+
+            if row < 8 then -- If there's another row to clear
+                if row % 2 == 1 then -- Odd rows: Turn right, dig, move forward, turn right
                     turtle.turnRight()
                     turtle.dig()
                     turtle.forward()
                     turtle.turnRight()
-                else                 -- Even rows: turn left, skip the 2 block air gap and move forward (to next row), turn left
+                else -- Even rows: Turn left, move 2 blocks into the next row, turn left
                     turtle.turnLeft()
                     turtle.dig()
                     turtle.forward()
@@ -120,8 +121,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
             end
         end
 
-        -- We're now at the bottom right of the farm
-        -- This gets us to the starting X,Z position of the current 14x14 layer
+        -- After clearing all rows in a layer, we are at the bottom-right corner of the 14x14
 
         -- Refuel using collected wood
         for i = 1, 16 do
