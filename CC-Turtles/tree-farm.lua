@@ -56,24 +56,20 @@
 -- Assumes we have moved 5 blocks from the chest and we're above the bottom left corner of the farm
 local function plantSaplings()
     turtle.select(16)
-    for row = 1, 8 do -- 8 total lines for 4 rows of trees
-        for col = 1, 4 do -- Repeat 4 times
-            turtle.placeDown() -- We start over the bottom left farm spot
-            turtle.forward()
+    for row = 1, 8 do -- There are 8 rows in total (4 rows of trees + 4 rows of gaps)
+        for i = 1, 14 do -- Try to plant a spruce sapling in a line
             turtle.placeDown()
-            if col < 4 then -- Move forward to the next dirt patch unless it's the last block
-                turtle.forward()
-                turtle.forward()
+            if i < 14 then
                 turtle.forward()
             end
         end
 
-        if row < 4 then
-            if row % 2 == 1 then -- Odd rows: right, forward, right
+        if row < 8 then -- If there's another row to clear
+            if row % 2 == 1 then -- Odd rows: Turn right, dig, move forward, turn right
                 turtle.turnRight()
                 turtle.forward()
                 turtle.turnRight()
-            else                 -- Even rows: left, forward, left
+            else -- Even rows: Turn left, move 2 blocks into the next row, turn left
                 turtle.turnLeft()
                 turtle.forward()
                 turtle.forward()
