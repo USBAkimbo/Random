@@ -13,7 +13,7 @@
 while true do
 
     turtle.select(1)
-    turtle.digDown()
-    turtle.dropUp()
+    turtle.digUp()
+    turtle.dropDown()
 
 end
