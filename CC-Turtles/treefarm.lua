@@ -222,8 +222,8 @@ while true do
     returnHome()
     print("Returned home")
 
-    print("Waiting for trees to grow (30 minutes)")
-    os.sleep(1800)
+    print("Waiting for trees to grow (10 minutes)")
+    os.sleep(600)
 
     print("Starting harvest")
     print("Moving 5 blocks forward to the start of the farm for harvesting")
