@@ -6,10 +6,9 @@
 -- How to run
 --
 
--- Open the turtle and paste in the below, then power cycle the turtle to start it
+-- Open the turtle and paste in the below, then power cycle the turtle to start it - the turtle stores all collected nether wart
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/nether-wart-farm.lua startup
 
--- Loop until we run out of fuel
 while true do
 
     print("Starting harvest")
