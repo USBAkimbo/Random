@@ -130,12 +130,15 @@ local function harvestTrees() -- Assumes we're at the bottom left corner of the 
 
         -- Deposit items in water stream
         turtle.dig()
-        turtle.forward() -- Hover over the water
+        turtle.forward()
+        turtle.dig()
+        turtle.forward() -- Hover over the water with at least a 1 block space to safely drop into the water
         turtle.digDown()
         for i = 1, 16 do
             turtle.select(i)
             turtle.dropDown() -- Drop all items into water or into the hole we just dug (which will drop to water when leaves decay)
         end
+        turtle.back()
         turtle.back() -- Return to original starting position
 
         -- Turn right and move through the farm to start the next layer
