@@ -141,19 +141,13 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
 
         -- Deposit items in water stream
         turtle.dig()
-        turtle.forward()
+        turtle.forward() -- Hover over the water
+        turtle.digDown()
         for i = 1, 16 do
             turtle.select(i)
-            turtle.place() -- Attempt to place a wood block
+            turtle.dropDown() -- Drop all items into water or into the hole we just dug
         end
-        turtle.back()
-        for i = 1, 16 do
-            turtle.select(i)
-            turtle.drop() -- Spit all items out at the log so they drop nicely into the water stream
-        end
-        turtle.forward()
-        turtle.dig() -- Remove the block
-        turtle.back()
+        turtle.back() -- Return to original starting position
 
         -- Turn right and dig through the farm to start the next layer
         turtle.turnRight()
