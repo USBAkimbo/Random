@@ -9,8 +9,8 @@
 -- How to run
 --
 -- Open the placed mining turtle then paste in these 2 commands
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/treefarm.lua treefarm
--- treefarm
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/tree-farm.lua tree-farm
+-- tree-farm
 
 -- What happens?
 -- The farm expects a 4x4 shape of floating 2x2 platforms made of dirt with a 2 block gap in between
