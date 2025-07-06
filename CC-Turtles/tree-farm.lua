@@ -105,21 +105,25 @@ end
 local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
     for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
-        for row = 1, 14 do
+        for row = 1, 4 do -- 4 rows because we skip 2 air block gaps
             for col = 1, 14 do
                 clearBlocks() -- Dig up, forward, down
                 if col < 14 then -- Move forward unless it's the last block in the row
                     turtle.forward()
                 end
             end
-            if row < 14 then -- After clearing a row, prepare for the next one within the same layer
+            if row < 4 then -- After clearing a row, prepare for the next one within the same layer
                 if row % 2 == 1 then -- Odd rows: turn right, move forward (to next row), turn right
                     turtle.turnRight()
                     turtle.dig()
                     turtle.forward()
                     turtle.turnRight()
-                else                 -- Even rows: turn left, move forward (to next row), turn left
+                else                 -- Even rows: turn left, skip the 2 block air gap and move forward (to next row), turn left
                     turtle.turnLeft()
+                    turtle.dig()
+                    turtle.forward()
+                    turtle.dig()
+                    turtle.forward()
                     turtle.dig()
                     turtle.forward()
                     turtle.turnLeft()
@@ -145,19 +149,18 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         turtle.digDown()
         for i = 1, 16 do
             turtle.select(i)
-            turtle.dropDown() -- Drop all items into water or into the hole we just dug
+            turtle.dropDown() -- Drop all items into water or into the hole we just dug (which will drop to water when leaves decay)
         end
         turtle.back() -- Return to original starting position
 
-        -- Turn right and dig through the farm to start the next layer
+        -- Turn right and move through the farm to start the next layer
         turtle.turnRight()
         for i = 1, 13 do
-            clearBlocks() -- Dig through the farm
             turtle.forward()
         end
         turtle.turnRight()
 
-        if layer < 11 then -- Move up only if there are more layers to harvest
+        if layer < 11 then -- Dig up 3 blocks only if there are more layers to harvest
             turtle.digUp()
             turtle.up()
             turtle.digUp()
