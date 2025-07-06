@@ -130,8 +130,8 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         -- We're now at the bottom right of the farm
         -- This gets us to the starting X,Z position of the current 14x14 layer
 
-        -- Refuel using collected wood
-        for i = 1, 16 do
+        -- Refuel using collected wood - we have slot 16 selected after planting or harvesting, so wood will be in slot 1 or 2
+        for i = 1, 2 do
             turtle.select(i)
             turtle.refuel()
         end
