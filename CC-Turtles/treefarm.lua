@@ -13,27 +13,45 @@
 -- treefarm
 
 -- What happens?
--- The starts the harvest by digging 5 blocks forward, then clears the 8x8 space up to 30 blocks
+-- The farm expects a 4x4 shape of floating 2x2 platforms made of dirt with a 2 block gap in between
+-- So 14x14 in total space
+-- The starts the harvest by digging 5 blocks forward, then clears the 14x14 space up to 30 blocks
 -- Then it returns to the chest and collects saplings
 -- Saplings are planted
 -- The turtle returns to the top of the chest and sleeps for 1 hour
 -- The turtle loops back to the start
 
+-- Farm map
+-- XX  XX  XX  XX
+-- XX  XX  XX  XX
+--
+--
+-- XX  XX  XX  XX
+-- XX  XX  XX  XX
+--
+--
+-- XX  XX  XX  XX
+-- XX  XX  XX  XX
+--
+--
+-- XX  XX  XX  XX
+-- XX  XX  XX  XX
+
 -- Function start --
 
--- Function to plant an 8x8 of saplings
+-- Function to plant an 14x14 of saplings
 -- Assumes we have moved 5 blocks from the chest and we're above the bottom left corner of the farm
 local function plantSaplings()
     turtle.select(16)
-    for row = 1, 8 do
-        for col = 1, 8 do
+    for row = 1, 14 do
+        for col = 1, 14 do
             turtle.placeDown()
-            if col < 8 then -- Move forward unless it's the last block
+            if col < 14 then -- Move forward unless it's the last block
                 turtle.forward()
             end
         end
 
-        if row < 8 then
+        if row < 14 then
             if row % 2 == 1 then -- Odd rows: right, forward, right
                 turtle.turnRight()
                 turtle.forward()
@@ -58,7 +76,7 @@ local function returnHome() -- Assumes we're at the end of a planting cycle or h
     turtle.dig()
     turtle.forward() -- Move forward 1 to hover over the water
     turtle.turnRight()
-    for i = 1, 7 do
+    for i = 1, 13 do -- Move to the bottom left of the farm
         turtle.dig()
         turtle.forward()
     end
@@ -71,17 +89,17 @@ local function returnHome() -- Assumes we're at the end of a planting cycle or h
     turtle.turnRight() -- Turn to face the farm
 end
 
-local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 8x8
+local function harvestTrees() -- Assumes we're at the start of the harvesting cycle at the top of the farm in the bottom left corner of the 14x14
     for layer = 1, 11 do -- 10 layers to cover 30 blocks (3 blocks per layer is cleared) - says 11 layers but lua is weird so it's really 10
         print("Clearing layer " .. layer .. "")
-        for row = 1, 8 do
-            for col = 1, 8 do
+        for row = 1, 14 do
+            for col = 1, 14 do
                 clearBlocks() -- Dig up, forward, down
-                if col < 8 then -- Move forward unless it's the last block in the row
+                if col < 14 then -- Move forward unless it's the last block in the row
                     turtle.forward()
                 end
             end
-            if row < 8 then -- After clearing a row, prepare for the next one within the same layer
+            if row < 14 then -- After clearing a row, prepare for the next one within the same layer
                 if row % 2 == 1 then -- Odd rows: turn right, move forward (to next row), turn right
                     turtle.turnRight()
                     turtle.dig()
@@ -97,7 +115,7 @@ local function harvestTrees() -- Assumes we're at the start of the harvesting cy
         end
 
         -- We're now at the bottom right of the farm
-        -- This gets us to the starting X,Z position of the current 8x8 layer
+        -- This gets us to the starting X,Z position of the current 14x14 layer
 
         -- Refuel using collected wood
         for i = 1, 16 do
@@ -167,7 +185,7 @@ end
 while true do
     -- We start on top of a chest 5 blocks away from the farm
     -- The 4 blocks in front of us have water below
-    -- The 5th block is the bottom left corner of the 8x8 farm
+    -- The 5th block is the bottom left corner of the 14x14 farm
 
     print("Collecting 1 stack of spruce saplings from the starting chest")
     turtle.select(16)
@@ -191,8 +209,8 @@ while true do
     returnHome()
     print("Returned home")
 
-    print("Waiting for trees to grow (60 minutes)")
-    os.sleep(3600) -- 1 hour in seconds
+    print("Waiting for trees to grow (30 minutes)")
+    os.sleep(1800)
 
     print("Starting harvest")
     print("Moving 5 blocks forward to the start of the farm for harvesting")
