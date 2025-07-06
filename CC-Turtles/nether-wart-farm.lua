@@ -11,10 +11,9 @@
 
 while true do
 
-    print("Nether wart farm running")
     turtle.select(1) -- Select slot 1
     data = turtle.inspectDown()
-    if data.state and data.state.age == 3 then -- Check if age is 3 (fully grown for nether wart)
+    if data.state.age == 3 then -- Check if age is 3 (fully grown for nether wart)
         turtle.digDown() -- Collect the nether wart
         turtle.placeDown() -- Re-plant the nether wart
     end
