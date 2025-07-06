@@ -19,27 +19,36 @@
 -- Then it returns to the chest and collects saplings
 -- Saplings are planted
 -- The turtle returns to the top of the chest and sleeps for 1 hour
--- The turtle loops back to the start
+-- The turtle loops back to the startprint("Cycle complete")
 
--- Farm map
+-- Crude farm map (use a highligher for the "SS")
 
 -- Key
--- W = Water stream 4 blocks below
+-- X = Water stream 4 blocks below
+-- S = Sapling on top of dirt
 
--- XX  XX  XX  XX
--- XX  XX  XX  XX
---
---
--- XX  XX  XX  XX
--- XX  XX  XX  XX
---
---
--- XX  XX  XX  XX
--- XX  XX  XX  XX
---
---
--- XX  XX  XX  XX
--- XX  XX  XX  XX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXSSXXSSXXSSXXSSXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
+-- XXXXXXXXXXXXXXXXXXXXXX
 
 -- Function start --
 
