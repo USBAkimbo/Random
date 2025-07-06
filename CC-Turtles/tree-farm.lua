@@ -56,10 +56,14 @@
 -- Assumes we have moved 5 blocks from the chest and we're above the bottom left corner of the farm
 local function plantSaplings()
     turtle.select(16)
-    for row = 1, 14 do
-        for col = 1, 14 do
+    for row = 1, 8 do -- 8 total lines for 4 rows of trees
+        for col = 1, 4 do -- Repeat 4 times
+            turtle.placeDown() -- We start over the bottom left farm spot
+            turtle.forward()
             turtle.placeDown()
-            if col < 14 then -- Move forward unless it's the last block
+            if col < 4 then -- Move forward to the next dirt patch unless it's the last block
+                turtle.forward()
+                turtle.forward()
                 turtle.forward()
             end
         end
@@ -71,6 +75,8 @@ local function plantSaplings()
                 turtle.turnRight()
             else                 -- Even rows: left, forward, left
                 turtle.turnLeft()
+                turtle.forward()
+                turtle.forward()
                 turtle.forward()
                 turtle.turnLeft()
             end
@@ -85,7 +91,7 @@ local function clearBlocks()
     turtle.digDown()
 end
 
-local function returnHome() -- Assumes we're at the end of a planting cycle or harvesting cycle and are in the bottom right corner of the farm
+local function returnHome() -- Assumes we're at the end of a planting cycle and are in the bottom right corner of the farm
     turtle.dig()
     turtle.forward() -- Move forward 1 to hover over the water
     turtle.turnRight()
@@ -186,12 +192,12 @@ print("Starting harvest")
 harvestTrees()
 print("Harvest complete")
 
-print("Returning home") -- We end up at the planting level but 30 blocks up, so we just need to go back 5 blocks and go down 30 blocks
+print("Returning home") -- We end up 30 blocks above the bottom right hand corner of the farm, facing into the farm
 for i = 1, 5 do
-    turtle.back()
+    turtle.back() -- Move back 5 spaces
 end
 for i = 1, 30 do
-    turtle.down()
+    turtle.down() -- Move down 30 spaces to end on top of the chest
 end
 
 -- Loop through planting, waiting and harvesting - loops infinitely so long as there's saplings in the chest and the server doesn't restart
@@ -222,7 +228,7 @@ while true do
     returnHome()
     print("Returned home")
 
-    print("Waiting for trees to grow (10 minutes)")
+    print("Waiting for trees to grow (10 mins)")
     os.sleep(600)
 
     print("Starting harvest")
