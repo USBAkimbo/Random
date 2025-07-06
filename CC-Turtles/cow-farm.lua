@@ -5,7 +5,7 @@
 -- How to run
 --
 -- Open the turtle and paste in the below, then power cycle the turtle to start it
--- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/cow-farm startup
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/cow-farm.lua startup
 
 while true do
 
