@@ -7,7 +7,7 @@
 -------------
 -- Open the placed mining turtle then paste in these 2 commands
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/3xcavate.lua 3xcavate
--- 3xcavate
+-- 3xcavate 16
 
 if not turtle then
     printError("Requires a Turtle")
