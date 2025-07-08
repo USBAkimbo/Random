@@ -2,6 +2,13 @@
 --
 -- SPDX-License-Identifier: LicenseRef-CCPL
 
+-------------
+-- Download and run
+-------------
+-- Open the placed mining turtle then paste in these 2 commands
+-- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/3xcavate.lua 3xcavate
+-- 3xcavate
+
 if not turtle then
     printError("Requires a Turtle")
     return
