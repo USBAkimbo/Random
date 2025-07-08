@@ -1,13 +1,31 @@
+------------------------------------------------
 -- SPDX-FileCopyrightText: 2017 Daniel Ratcliffe
---
 -- SPDX-License-Identifier: LicenseRef-CCPL
+------------------------------------------------
 
--------------
+-----------
+-- 3xcavate
+-----------
+
+----------------
+-- What is this?
+----------------
+-- This is a mod of the excavate.lua script, except it mines 3 blocks at a time and goes down 3 blocks at a time
+-- This was a GPT one shot from Claude (annoyingly since I spent so much time on my own)
+
+-------------------
 -- Download and run
--------------
--- Open the placed mining turtle then paste in these 2 commands
+-------------------
+-- Go to the corner of a chunk border where you want to mine
+-- Place a chest with a void filter and a chunk loader above it
+-- Place 4 mining turtles around the chest
+-- Open each mining turtle and paste in this
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/3xcavate.lua 3xcavate
+-- Then excavate a 16x16 area down to bedrock
 -- 3xcavate 16
+-- The turtle will come back up to drop off items and be refueled
+
+--------------------------------------------------
 
 if not turtle then
     printError("Requires a Turtle")
