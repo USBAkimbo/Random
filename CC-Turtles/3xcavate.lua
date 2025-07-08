@@ -126,6 +126,54 @@ function refuel(amount)
     return true
 end
 
+-- New function to mine 3 layers at current position
+local function mineThreeLayers()
+    if not refuel() then
+        print("Not enough Fuel")
+        returnSupplies()
+    end
+
+    -- Mine up
+    while turtle.detectUp() do
+        if turtle.digUp() then
+            if not collect() then
+                returnSupplies()
+            end
+        else
+            break
+        end
+    end
+    
+    -- Attack up if there's a mob
+    if turtle.attackUp() then
+        if not collect() then
+            returnSupplies()
+        end
+    end
+
+    -- Mine current level (forward direction handled by movement)
+    
+    -- Mine down
+    while turtle.detectDown() do
+        if turtle.digDown() then
+            if not collect() then
+                returnSupplies()
+            end
+        else
+            break
+        end
+    end
+    
+    -- Attack down if there's a mob
+    if turtle.attackDown() then
+        if not collect() then
+            returnSupplies()
+        end
+    end
+
+    return true
+end
+
 local function tryForwards()
     if not refuel() then
         print("Not enough Fuel")
@@ -152,34 +200,42 @@ local function tryForwards()
 
     xPos = xPos + xDir
     zPos = zPos + zDir
+    
+    -- Mine 3 layers at this new position
+    mineThreeLayers()
+    
     return true
 end
 
-local function tryDown()
+-- New function to descend 3 layers at once
+local function tryDown3()
     if not refuel() then
         print("Not enough Fuel")
         returnSupplies()
     end
 
-    while not turtle.down() do
-        if turtle.detectDown() then
-            if turtle.digDown() then
+    -- Descend 3 layers
+    for i = 1, 3 do
+        while not turtle.down() do
+            if turtle.detectDown() then
+                if turtle.digDown() then
+                    if not collect() then
+                        returnSupplies()
+                    end
+                else
+                    return false
+                end
+            elseif turtle.attackDown() then
                 if not collect() then
                     returnSupplies()
                 end
             else
-                return false
+                sleep(0.5)
             end
-        elseif turtle.attackDown() then
-            if not collect() then
-                returnSupplies()
-            end
-        else
-            sleep(0.5)
         end
+        depth = depth + 1
     end
 
-    depth = depth + 1
     if math.fmod(depth, 10) == 0 then
         print("Descended " .. depth .. " metres.")
     end
@@ -284,13 +340,16 @@ if not refuel() then
     return
 end
 
-print("Excavating...")
+print("Excavating with 3-layer efficiency...")
 
 local reseal = false
 turtle.select(1)
 if turtle.digDown() then
     reseal = true
 end
+
+-- Mine the starting position (3 layers)
+mineThreeLayers()
 
 local alternate = 0
 local done = false
@@ -340,7 +399,8 @@ while not done do
         end
     end
 
-    if not tryDown() then
+    -- Descend 3 layers at once for next level
+    if not tryDown3() then
         done = true
         break
     end
