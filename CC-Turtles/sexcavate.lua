@@ -120,7 +120,8 @@ local function returnToStart() -- Assumes we're at the bottom right corner of th
             if not turtle.detectUp() then -- Check if there is no block above
                 turtle.up() -- Try to go up to get back to the chest
             else
-                turtle.down() -- Go down 1 block to be at the same level as the chest
+                turtle.down()
+                turtle.down() -- Go down 2 blocks to be at the same level as the chest
                 break -- Exit the loop if a block is detected above
             end
         end
