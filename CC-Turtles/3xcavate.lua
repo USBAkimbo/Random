@@ -374,14 +374,16 @@ local function initialRefuel()
     turtle.turnRight() -- Turn to face the mine
 end
 
+-- Script start
+
+initialRefuel()
+
 if not refuel() then
     print("Out of Fuel")
     return
 end
 
 print("Excavating with 3-layer efficiency...")
-
-initialRefuel()
 
 local reseal = false
 turtle.select(1)
