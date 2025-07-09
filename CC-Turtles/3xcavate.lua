@@ -360,12 +360,28 @@ function goTo(x, y, z, xd, zd)
     end
 end
 
+local function initialRefuel()
+    turtle.turnRight()
+    turtle.turnRight() -- Turn to face the chest
+    turtle.select(1)
+    turtle.suck() -- Pull a stack of charcoal blocks from the chest and refuel
+    turtle.refuel()
+    for i = 1, 16 do
+        turtle.select(i)
+        turtle.drop() -- Dump all inventory into the chest for a clean start
+    end
+    turtle.turnRight()
+    turtle.turnRight() -- Turn to face the mine
+end
+
 if not refuel() then
     print("Out of Fuel")
     return
 end
 
 print("Excavating with 3-layer efficiency...")
+
+initialRefuel()
 
 local reseal = false
 turtle.select(1)
