@@ -59,44 +59,40 @@ end
 
 -- Function to clear a 16x16x3 area, starting from the bottom left and ending up in the bottom right
 local function dig16x16x3() -- Assumes we're at the bottom left corner of the 16x16 area
-    for layer = 1, 2 do -- TESTING - 2 LAYERS - 3 blocks x 20 layers = 60 blocks dug down
-        print("Clearing layer " .. layer .. "")
-        for row = 1, 16 do -- There are 16 rows in total
-            for i = 1, 16 do -- Clear 16 blocks forward unless we're on the last block
-                clearBlocks()
-                if i < 16 then
-                    if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
-                        for i = 1, 10 do
-                            turtle.dig()
-                        end
-                        turtle.forward()
-                    end
+for row = 1, 16 do -- There are 16 rows in total
+    for i = 1, 16 do -- Clear 16 blocks forward unless we're on the last block
+        clearBlocks()
+        if i < 16 then
+            if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
+                for i = 1, 10 do
+                    turtle.dig()
                 end
+                turtle.forward()
             end
+        end
+    end
 
-            if row < 16 then -- If there's another row to clear
-                if row % 2 == 1 then -- Odd rows: Turn right, dig, move forward, turn right
-                    turtle.turnRight()
+    if row < 16 then -- If there's another row to clear
+        if row % 2 == 1 then -- Odd rows: Turn right, dig, move forward, turn right
+            turtle.turnRight()
+            turtle.dig()
+            if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
+                for i = 1, 10 do
                     turtle.dig()
-                    if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
-                        for i = 1, 10 do
-                            turtle.dig()
-                        end
-                        turtle.forward()
-                    end
-                    turtle.turnRight()
-                else -- Even rows: Turn left, move 2 blocks into the next row, turn left
-                    turtle.turnLeft()
-                    turtle.dig()
-                    if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
-                        for i = 1, 10 do
-                            turtle.dig()
-                        end
-                        turtle.forward()
-                    end
-                    turtle.turnLeft()
                 end
+                turtle.forward()
             end
+            turtle.turnRight()
+        else -- Even rows: Turn left, move 2 blocks into the next row, turn left
+            turtle.turnLeft()
+            turtle.dig()
+            if not turtle.forward() then -- If we can't move forward there's probably gravel, so dig 10 times to get rid of it
+                for i = 1, 10 do
+                    turtle.dig()
+                end
+                turtle.forward()
+            end
+            turtle.turnLeft()
         end
     end
 end
