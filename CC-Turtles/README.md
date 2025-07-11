@@ -3,17 +3,27 @@
 - Designed for vanilla, but played on a vanilla++ server
 - Read each script for more detail and how to run them
 
+# 3xcavate.lua
+- A mod of the orirignal `excavate` command
+- It assumes you have placed the turtle in front of a chest, so the chest is behind the turtle
+- Then it turns around and tries to refuel using items in the chest (I put 4 stacks of charcoal blocks in the chest)
+- Then it dumps all items
+- Then it starts the regular `excavate` command except it digs up, forward and down
+- It returns to the chest to drop off items
+- It stops at the chest if it runs out of fuel
+
 # cobble-farm.lua
 - Farms cobble and stores it in a chest
 - Uses no fuel and runs forever
 - Works great with a compacting chest
 - Produces 3k+ cobble per hour
+- Literally just digs up and deposits down
 
 # cow-farm.lua
 - Combine with the Cow Crusher 9000
 - Inifinitely breeds 48 cows using wheat every 5 mins
 - Wheat is recharged from the above chest
-- -- Insert image here --
+- ![](img/2025-07-11_23.15.20.png)
 
 # nether-wart-farm.lua
 - Checks if the nether wart has grown, then harvests and replants if it has
