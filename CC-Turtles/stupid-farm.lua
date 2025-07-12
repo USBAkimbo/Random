@@ -10,6 +10,7 @@
 -- How it works
 --
 -- The turtle simply digs in front and outputs to the chest below
+-- Works well for sugar cane and bamboo
 
 while true do
     turtle.select(1) -- Select slot 1
