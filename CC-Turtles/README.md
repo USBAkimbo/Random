@@ -28,8 +28,9 @@
 # nether-wart-farm.lua
 - Checks if the nether wart has grown, then harvests and replants if it has
 
-# wheat-farm.lua
-- WIP
+# stupid-farm.lua
+- Breaks the block in front
+- Useful for tiny sugarcane or bamboo farms
 
 # tree-farm.lua
 - Farms a 4x4 grid of 2x2 spruce trees (16 trees total)
@@ -41,3 +42,6 @@
 - The below image shows the storage hopper exporter from Tom's Simple Storage exporting saplings from my system into the chest
 - The bottom water stream just collects into a chest - you can sort as you like from there
 - ![](img/2025-07-06_17.29.20.png)
+
+# wheat-farm.lua
+- WIP
