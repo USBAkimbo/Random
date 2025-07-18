@@ -462,6 +462,9 @@ while not done do
         done = true
         break
     end
+    
+    -- Mine the new starting corner before moving
+    mineThreeLayers()
 end
 
 print("Returning to surface...")
