@@ -12,21 +12,23 @@
 ----------------
 -- This was a GPT one shot from Claude (annoyingly since I spent so much time on my own)
 -- This is a mod of the excavate.lua script which adds 3 new features
--- 1) Digs forward and down 3 blocks at a time instead of 1, effectively making it 3x faster (hence 3xcavate)
+-- 1) Digs up, forward and down and then moves forward, effectively making it 3x faster (hence 3xcavate)
 -- 2) Starts by refuelling itself from the chest behind it to ensure fuel is full before starting
 -- 3) Refuels completely from the fuel chest placed above the item chest after dropping off items and when fuel is too low
 
 -------------------
--- Download and run
+-- How to use
 -------------------
 -- Go to the corner of a chunk border where you want to mine
--- Place a chest with a void filter and a chunk loader above it
+-- Place a chest with a void filter
+-- Place a chunk loader about 5 blocks above it
 -- Place 4 mining turtles around the chest
 -- Open each mining turtle and paste in this
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/3xcavate.lua 3xcavate
 -- Then excavate a 16x16 area down to bedrock
 -- 3xcavate 16
--- The turtle will come back up to drop off items and be refueled
+-- The turtle will come back up to drop off items and be refueled from the chest above the current chest
+-- Make sure you place a chest above the original chest and fill it with fuel
 
 --------------------------------------------------
 
