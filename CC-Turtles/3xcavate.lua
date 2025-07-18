@@ -10,8 +10,11 @@
 ----------------
 -- What is this?
 ----------------
--- This is a mod of the excavate.lua script, except it mines 3 blocks at a time and goes down 3 blocks at a time
 -- This was a GPT one shot from Claude (annoyingly since I spent so much time on my own)
+-- This is a mod of the excavate.lua script which adds 3 new features
+-- 1) Digs forward and down 3 blocks at a time instead of 1, effectively making it 3x faster (hence 3xcavate)
+-- 2) Starts by refuelling itself from the chest behind it to ensure fuel is full before starting
+-- 3) Refuels completely from the fuel chest placed above the item chest after dropping off items and when fuel is too low
 
 -------------------
 -- Download and run
@@ -78,21 +81,31 @@ local function unload(_bKeepOneFuelStack)
 end
 
 local function returnSupplies()
+    -- Save the turtle's current position and direction
     local x, y, z, xd, zd = xPos, depth, zPos, xDir, zDir
-    print("Returning to surface...")
+    print("Returning to base to unload...")
+
+    -- Travel to the starting point (0,0,0)
     goTo(0, 0, 0, 0, -1)
+    print("Arrived. Unloading and refuelling...")
 
-    local fuelNeeded = 2 * (x + y + z) + 1
-    if not refuel(fuelNeeded) then
-        unload(true)
-        print("Waiting for fuel")
-        while not refuel(fuelNeeded) do
-            os.pullEvent("turtle_inventory")
-        end
-    else
-        unload(true)
+    -- Drop off all items into the chest
+    for i = 1, 16 do
+        turtle.select(i)
+        turtle.drop()
     end
+    
+    print("Inventory unloaded.")
 
+    -- Go up to the fuel chest, refuel and go back down
+    turtle.up()
+    turtle.select(1)
+    turtle.suck()
+    turtle.refuel()
+    turtle.drop()
+    turtle.down()
+
+    -- Resume mining at the last position
     print("Resuming mining...")
     goTo(x, y, z, xd, zd)
 end
