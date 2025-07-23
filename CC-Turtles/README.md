@@ -31,8 +31,8 @@
 - Useful for tiny sugarcane or bamboo farms
 
 # tree-farm.lua
-- Farms a 4x4 grid of 2x2 spruce trees (16 trees total)
-- Produces around 5000 wood per hour
+- Farms a 14x14 grid of the tall 2x2 spruce trees (16 trees total for an area of 14x14x30)
+- Produces 5k+ wood per hour
 - The below image shows the farm from the perspective of the bottom left corner (note the chunk loader for the farm)
 - The chest needs to be full of saplings so the turtle can collect them
 - The sides are 4 blocks wide with 2 blocks between each dirt platform
