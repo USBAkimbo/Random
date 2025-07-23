@@ -9,6 +9,8 @@
   - Goes down 3 layers at a time
   - Refuels after dropping off items
 - Read the script for detailed instructions on how to use it
+- Your setup should look something like this
+- - ![](img/2025-07-23_22.39.39.png)
 
 # cobble-farm.lua
 - Farms cobble and stores it in a chest
