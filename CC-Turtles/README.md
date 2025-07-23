@@ -4,13 +4,11 @@
 - Read each script for more detail and how to run them
 
 # 3xcavate.lua
-- A mod of the orirignal `excavate` command
-- It assumes you have placed the turtle in front of a chest, so the chest is behind the turtle
-- Then it turns around and tries to refuel using items in the chest (I put 4 stacks of charcoal blocks in the chest)
-- Then it dumps all items
-- Then it starts the regular `excavate` command except it digs up, forward and down
-- It returns to the chest to drop off items
-- It stops at the chest if it runs out of fuel
+- A mod of the orirignal `excavate` command with 3 new features
+  - Digs 3 blocks at a time (up, forward and down)
+  - Goes down 3 layers at a time
+  - Refuels after dropping off items
+- Read the script for detailed instructions on how to use it
 
 # cobble-farm.lua
 - Farms cobble and stores it in a chest
