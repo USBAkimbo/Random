@@ -4,7 +4,7 @@
 - Read each script for more detail and how to run them
 
 # 3xcavate.lua
-- A mod of the orirignal `excavate` command with 3 new features
+- A mod of the original `excavate` command with 3 new features
   - Digs 3 blocks at a time (up, forward and down)
   - Goes down 3 layers at a time
   - Refuels after dropping off items
