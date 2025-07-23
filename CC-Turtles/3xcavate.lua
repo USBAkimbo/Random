@@ -19,16 +19,24 @@
 -------------------
 -- How to use
 -------------------
--- Go to the corner of a chunk border where you want to mine
--- Place a chest with a void filter
--- Place a chunk loader about 5 blocks above it
+-- These instructions assume you want to mine a 2x2 chunk area (32x32 in total) with 4 turtles around 1 chest
+-- Go to centre of your 2x2 chunk area
+-- Place a diamond chest - this is your item chest
+-- Place a void filter in the chest
+-- Set the void filter to whitelist only the items you want to keep (redstone, diamond, lapis, iron and gold is what I set)
+-- Set the void filter to keep 1 stack of anything that doesn't match
+-- Place a stack of charcoal blocks inside the chest
+-- Place a regular chest above your diamond chest - this is your fuel chest
+-- Fill it with at least 5 stacks of charcoal blocks
+-- Place a chunk loader above the chest
 -- Place 4 mining turtles around the chest
 -- Open each mining turtle and paste in this
 -- wget https://raw.githubusercontent.com/USBAkimbo/Random/refs/heads/master/CC-Turtles/3xcavate.lua 3xcavate
--- Then excavate a 16x16 area down to bedrock
+-- Then run the below to excavate a 16x16 area down to bedrock
 -- 3xcavate 16
--- The turtle will come back up to drop off items and be refueled from the chest above the current chest
--- Make sure you place a chest above the original chest and fill it with fuel
+-- When the turtle's inventory is full, it will return to the item chest and unload all items
+-- Then it will go up 1 block and refuel from the fuel chest
+-- Then it will resume mining from where it was until it hits bedrock (or encounters a block it can't move into or dig)
 
 --------------------------------------------------
 
