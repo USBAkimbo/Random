@@ -44,4 +44,8 @@
 - ![](img/2025-07-06_17.29.20.png)
 
 # wheat-farm.lua
-- WIP
+- Farms the wheat below the turtle and drops items into a water stream above it
+- Designed for a 8x2 line of turtles
+- See below for setup examples
+- ![](img/2025-07-26_00.30.54.png)
+- ![](img/2025-07-26_00.31.08.png)
