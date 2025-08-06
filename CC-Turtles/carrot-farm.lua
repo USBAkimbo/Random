@@ -17,35 +17,33 @@
 -- The extra carrots are stored in the turtle
 -- The turtle stops when it has no more inventory space
 
--- ────────────────────────────────────────────────────────────────
---  Carrot farmer – exits when inventory is full
---  Adapted for ComputerCraft / CC:Tweaked
--- ────────────────────────────────────────────────────────────────
-
 local function inventoryFull()
     -- Returns true if every slot contains at least one item.
-    local slots = turtle.getInventorySize()   -- usually 16 on a vanilla turtle
-    for i = 1, slots do
+    for i = 1, 16 do -- A turtle's inventory size is fixed at 16 slots.
         if turtle.getItemCount(i) == 0 then
-            return false          -- found an empty slot → inventory NOT full
+            return false -- Found an empty slot.
         end
     end
-    return true                   -- all slots had something in them
+    return true -- All slots have items.
 end
 
 while true do
     if inventoryFull() then
         print("[CarrotFarmer] Inventory is full – stopping.")
-        os.exit()                 -- terminate the program gracefully
+        break -- A more common way to exit a loop. os.exit() also works.
     end
 
-    turtle.select(1)              -- keep using slot 1 for carrot operations
+    turtle.select(1) -- Use slot 1 for planting. Assumes carrots are in this slot.
+
+    -- Inspect the block below the turtle.
     local success, data = turtle.inspectDown()
 
-    if success and data and data.state and data.state.age == 7 then
-        turtle.digDown()          -- harvest mature carrot
-        turtle.placeDown()        -- plant a new one immediately
+    -- Check if inspection was successful and the block is a mature carrot.
+    -- Carrots are mature when their 'age' block state is 7.
+    if success and data.name == "minecraft:carrots" and data.state and data.state.age == 7 then
+        turtle.digDown()   -- Harvest the mature carrot.
+        turtle.placeDown() -- Plant a new one from the selected slot (1).
     end
 
-    sleep(0.1)                    -- small pause to prevent CPU hogging
+    os.sleep(0.1) -- Use os.sleep() and provide a small delay.
 end
