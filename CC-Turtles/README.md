@@ -12,6 +12,9 @@
 - Your setup should look something like this
 - - ![](img/2025-07-23_22.39.39.png)
 
+# carrot-farm.lua
+- Farms the carrot below it until the turtle's inventory is full, then it stops
+
 # cobble-farm.lua
 - Farms cobble and stores it in a chest
 - Uses no fuel and runs forever
