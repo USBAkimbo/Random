@@ -23,5 +23,5 @@ elif [ "$n" == '5' ]; then
 elif [ "$n" == '6' ]; then
   yt-dlp -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
 elif [ "$n" == '7' ]; then
-  yt-dlp -o "/storage/emulated/0/Download/$(date +'%Y-%m-%d--%H-%M-%S').mp4" $url
+  yt-dlp -o "/storage/emulated/0/Download/tmpvid.mp4" $url && ffmpeg -i /storage/emulated/0/Download/tmpvid.mp4 "/storage/emulated/0/Download/$(date +'%Y-%m-%d--%H-%M-%S').mp4" && rm -f "/storage/emulated/0/Download/tmpvid.mp4"
 fi
