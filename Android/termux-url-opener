@@ -25,5 +25,5 @@ elif [ "$n" == '6' ]; then
 elif [ "$n" == '7' ]; then
   tempfile=$(mktemp /storage/emulated/0/Download/temp_XXXXXX)
   trap 'rm -f "$tempfile"' EXIT
-  yt-dlp -o "$tempfile" "$url" && ffmpeg -i "$tempfile" "/storage/emulated/0/Download/$(date +'%Y-%m-%d--%H-%M-%S').mp4" && rm "$tempfile"
+  yt-dlp -o "$tempfile" "$url" && ffmpeg -i "$tempfile" "/storage/emulated/0/Download/$(date +'%Y-%m-%d--%H-%M-%S').mp4"
 fi
