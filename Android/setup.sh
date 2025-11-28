@@ -17,7 +17,7 @@ pkg update -y
 pkg upgrade -y
 pkg install wget -y
 pkg install -y python ffmpeg nmap jq
-yes | pip install yt-dlp
+yes | pip install -U "yt-dlp[default]"
 
 # Download main scripts to home folder
 wget https://raw.githubusercontent.com/USBAkimbo/Random/master/Android/pka-downloader.sh
