@@ -1,5 +1,3 @@
-#!/bin/bash
-
 clear
 echo PKA Downloader
 echo
@@ -15,128 +13,6 @@ DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL:-}"
 # Ensure output folder exists
 mkdir -p "$OUTPUT_FOLDER"
 
-# Function to send Discord notification
-send_discord_notification() {
-    local message="$1"
-    if [ -n "$DISCORD_WEBHOOK_URL" ]; then
-        # Use jq to properly escape the message for JSON
-        if command -v jq >/dev/null 2>&1; then
-            local payload=$(jq -n --arg msg "$message" '{content: $msg}')
-            curl -H "Content-Type: application/json" \
-                 -X POST \
-                 -d "$payload" \
-                 "$DISCORD_WEBHOOK_URL" 2>/dev/null
-        else
-            # Fallback: basic escaping if jq is not available
-            local escaped_msg=$(echo "$message" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
-            curl -H "Content-Type: application/json" \
-                 -X POST \
-                 -d "{\"content\": \"$escaped_msg\"}" \
-                 "$DISCORD_WEBHOOK_URL" 2>/dev/null
-        fi
-    fi
-}
-
-# Function to extract episode number from title
-extract_episode_number() {
-    local title="$1"
-    # Try to extract PKN followed by number first
-    if echo "$title" | grep -qiE 'PKN'; then
-        echo "$title" | grep -oiP 'PKN\s*\K\d+' || echo ""
-    # Then try PKA followed by number
-    elif echo "$title" | grep -qiE 'PKA'; then
-        echo "$title" | grep -oiP 'PKA\s*\K\d+' || echo ""
-    # Try to extract just a number (for "Painkiller Already 733" format)
-    else
-        echo "$title" | grep -oP '\d+' | head -1 || echo ""
-    fi
-}
-
-# Function to determine podcast type
-get_podcast_type() {
-    local title="$1"
-    if echo "$title" | grep -qiE 'PKN'; then
-        echo "PKN"
-    else
-        echo "PKA"
-    fi
-}
-
-# Function to check if episode already exists
-episode_exists() {
-    local podcast_type="$1"
-    local episode_num="$2"
-    if [ -f "$OUTPUT_FOLDER/$podcast_type $episode_num.mp3" ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-# Function to download and process episode
-download_episode() {
-    local title="$1"
-    local audio_url="$2"
-    local pub_date="$3"
-    
-    local podcast_type=$(get_podcast_type "$title")
-    local episode_num=$(extract_episode_number "$title")
-    
-    if [ -z "$episode_num" ]; then
-        echo "Warning: Could not extract episode number from '$title', skipping..."
-        return 1
-    fi
-    
-    if episode_exists "$podcast_type" "$episode_num"; then
-        echo "Episode $podcast_type $episode_num already exists, skipping..."
-        return 0
-    fi
-    
-    echo "Downloading $podcast_type $episode_num..."
-    
-    # Create temp folder
-    mkdir -p "$TEMP_FOLDER"
-    cd "$TEMP_FOLDER"
-    
-    # Download the audio file
-    local temp_file="temp_audio.mp3"
-    if ! wget -q -O "$temp_file" "$audio_url"; then
-        echo "Error: Failed to download episode"
-        cd ..
-        rm -rf "$TEMP_FOLDER"
-        return 1
-    fi
-    
-    # Convert pub_date to ISO 8601 format
-    # Typical RSS pubDate format: "Wed, 15 Jan 2025 12:00:00 +0000"
-    local upload_date_iso8601=$(date -d "$pub_date" --iso-8601=seconds 2>/dev/null || echo "$pub_date")
-    
-    # Process with ffmpeg: add metadata, compress, convert to mono
-    if ! ffmpeg -y -i "$temp_file" \
-         -metadata title="$podcast_type $episode_num" \
-         -metadata artist="PKA" \
-         -metadata date="$upload_date_iso8601" \
-         -b:a 32k -ac 1 \
-         "$podcast_type $episode_num.mp3" >/dev/null 2>&1; then
-        echo "Error: Failed to process episode with ffmpeg"
-        cd ..
-        rm -rf "$TEMP_FOLDER"
-        return 1
-    fi
-    
-    # Move to output folder
-    mv "$podcast_type $episode_num.mp3" "$OUTPUT_FOLDER/"
-    
-    # Clean up temp folder
-    cd ..
-    rm -rf "$TEMP_FOLDER"
-    
-    echo "Successfully downloaded and processed $podcast_type $episode_num"
-    send_discord_notification "📥 Downloaded new PKA episode: **$podcast_type $episode_num** - $title"
-    
-    return 0
-}
-
 echo ===== Fetching podcast feed =====
 # Download the XML feed
 FEED_FILE="/tmp/pka-feed-$(date +'%Y%m%d%H%M%S').xml"
@@ -147,16 +23,9 @@ fi
 
 echo ===== Checking for new episodes =====
 
-# Parse XML and process episodes
-# Extract all items from the feed (most recent first)
+# Track downloads
 downloaded_count=0
 
-# Use a temporary file to track downloads since the while loop runs in a subshell
-DOWNLOAD_LOG="/tmp/pka-downloads-$(date +'%Y%m%d%H%M%S').log"
-> "$DOWNLOAD_LOG"  # Create empty file
-
-# Use xmllint or grep/sed to parse XML
-# We'll use a simple approach with grep and sed since xmllint might not be available
 # Extract each <item> block and process it
 awk '/<item>/,/<\/item>/' "$FEED_FILE" | while IFS= read -r line; do
     # Collect lines until we have a complete item
@@ -167,7 +36,6 @@ awk '/<item>/,/<\/item>/' "$FEED_FILE" | while IFS= read -r line; do
         
         # Extract title (handles both plain text and CDATA)
         title=$(echo "$item_content" | sed -n 's/.*<title[^>]*>\s*\(<!\[CDATA\[\)\?\s*\([^]<]*\)\s*\(\]\]>\)\?\s*<\/title>.*/\2/p' | head -1)
-        # Fallback to simpler pattern if CDATA pattern didn't match
         if [ -z "$title" ]; then
             title=$(echo "$item_content" | sed -n 's/.*<title[^>]*>\([^<]*\)<\/title>.*/\1/p' | head -1)
         fi
@@ -175,14 +43,79 @@ awk '/<item>/,/<\/item>/' "$FEED_FILE" | while IFS= read -r line; do
         # Extract enclosure URL (audio file)
         audio_url=$(echo "$item_content" | sed -n 's/.*url="\([^"]*\)".*/\1/p' | head -1)
         
-        # Extract pubDate (matches first occurrence only)
+        # Extract pubDate
         pub_date=$(echo "$item_content" | sed -n 's/.*<pubDate[^>]*>\([^<]*\)<\/pubDate>.*/\1/p' | head -1)
         
         # Process if we have all required fields
         if [ -n "$title" ] && [ -n "$audio_url" ] && [ -n "$pub_date" ]; then
-            download_episode "$title" "$audio_url" "$pub_date"
-            if [ $? -eq 0 ]; then
-                echo "1" >> "$DOWNLOAD_LOG"
+            # Determine podcast type (PKA or PKN)
+            if echo "$title" | grep -qiE 'PKN'; then
+                PODCAST=PKN
+            else
+                PODCAST=PKA
+            fi
+            
+            # Get the episode number
+            if echo "$title" | grep -qiE 'PKN'; then
+                EP_NUM=$(echo "$title" | grep -oiP 'PKN\s*\K\d+' || echo "")
+            elif echo "$title" | grep -qiE 'PKA'; then
+                EP_NUM=$(echo "$title" | grep -oiP 'PKA\s*\K\d+' || echo "")
+            else
+                # Fallback: extract first number
+                EP_NUM=$(echo "$title" | grep -oP '\d+' | head -1 || echo "")
+            fi
+            
+            # Skip if we couldn't extract episode number
+            if [ -z "$EP_NUM" ]; then
+                echo "Warning: Could not extract episode number from '$title', skipping..."
+            elif [ -f "$OUTPUT_FOLDER/$PODCAST $EP_NUM.mp3" ]; then
+                echo "Episode $PODCAST $EP_NUM already exists, skipping..."
+            else
+                echo "Downloading $PODCAST $EP_NUM..."
+                
+                # Create temp folder
+                mkdir -p "$TEMP_FOLDER"
+                cd "$TEMP_FOLDER"
+                
+                # Download the audio file
+                if wget -q -O "temp_audio.mp3" "$audio_url"; then
+                    # Convert pub_date to ISO 8601 format
+                    UPLOAD_DATE_ISO8601=$(date -d "$pub_date" --iso-8601=seconds 2>/dev/null || echo "$pub_date")
+                    
+                    # Process with ffmpeg: add metadata, compress, convert to mono
+                    if ffmpeg -y -i "temp_audio.mp3" \
+                         -metadata title="$PODCAST $EP_NUM" \
+                         -metadata artist="PKA" \
+                         -metadata date="$UPLOAD_DATE_ISO8601" \
+                         -b:a 32k -ac 1 \
+                         "$PODCAST $EP_NUM.mp3" >/dev/null 2>&1; then
+                        
+                        # Move to output folder
+                        mv "$PODCAST $EP_NUM.mp3" "$OUTPUT_FOLDER/"
+                        
+                        echo "Successfully downloaded and processed $PODCAST $EP_NUM"
+                        
+                        # Send Discord notification
+                        if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+                            if command -v jq >/dev/null 2>&1; then
+                                payload=$(jq -n --arg msg "Downloaded new episode: $PODCAST $EP_NUM" '{content: $msg}')
+                                curl -H "Content-Type: application/json" -X POST -d "$payload" "$DISCORD_WEBHOOK_URL" 2>/dev/null
+                            else
+                                curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"Downloaded new episode: $PODCAST $EP_NUM\"}" "$DISCORD_WEBHOOK_URL" 2>/dev/null
+                            fi
+                        fi
+                        
+                        downloaded_count=$((downloaded_count + 1))
+                    else
+                        echo "Error: Failed to process episode with ffmpeg"
+                    fi
+                else
+                    echo "Error: Failed to download episode"
+                fi
+                
+                # Clean up temp folder
+                cd ..
+                rm -rf "$TEMP_FOLDER"
             fi
         fi
         
@@ -192,17 +125,22 @@ awk '/<item>/,/<\/item>/' "$FEED_FILE" | while IFS= read -r line; do
     fi
 done
 
-# Count successful downloads
-downloaded_count=$(wc -l < "$DOWNLOAD_LOG" 2>/dev/null || echo 0)
-
-# Clean up feed file and download log
+# Clean up feed file
 rm -f "$FEED_FILE"
-rm -f "$DOWNLOAD_LOG"
 
 echo
 echo ===== Done! =====
 echo "Downloaded $downloaded_count new episode(s)"
-send_discord_notification "✅ PKA Downloader completed: $downloaded_count new episode(s) downloaded"
+
+# Send completion notification
+if [ -n "$DISCORD_WEBHOOK_URL" ] && [ $downloaded_count -gt 0 ]; then
+    if command -v jq >/dev/null 2>&1; then
+        payload=$(jq -n --arg msg "PKA Downloader completed: $downloaded_count new episode(s) downloaded" '{content: $msg}')
+        curl -H "Content-Type: application/json" -X POST -d "$payload" "$DISCORD_WEBHOOK_URL" 2>/dev/null
+    else
+        curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"PKA Downloader completed: $downloaded_count new episode(s) downloaded\"}" "$DISCORD_WEBHOOK_URL" 2>/dev/null
+    fi
+fi
 
 # Only pause if running interactively
 if [ -t 0 ]; then
