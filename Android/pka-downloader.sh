@@ -19,10 +19,21 @@ mkdir -p "$OUTPUT_FOLDER"
 send_discord_notification() {
     local message="$1"
     if [ -n "$DISCORD_WEBHOOK_URL" ]; then
-        curl -H "Content-Type: application/json" \
-             -X POST \
-             -d "{\"content\": \"$message\"}" \
-             "$DISCORD_WEBHOOK_URL" 2>/dev/null
+        # Use jq to properly escape the message for JSON
+        if command -v jq >/dev/null 2>&1; then
+            local payload=$(jq -n --arg msg "$message" '{content: $msg}')
+            curl -H "Content-Type: application/json" \
+                 -X POST \
+                 -d "$payload" \
+                 "$DISCORD_WEBHOOK_URL" 2>/dev/null
+        else
+            # Fallback: basic escaping if jq is not available
+            local escaped_msg=$(echo "$message" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
+            curl -H "Content-Type: application/json" \
+                 -X POST \
+                 -d "{\"content\": \"$escaped_msg\"}" \
+                 "$DISCORD_WEBHOOK_URL" 2>/dev/null
+        fi
     fi
 }
 
@@ -154,14 +165,18 @@ awk '/<item>/,/<\/item>/' "$FEED_FILE" | while IFS= read -r line; do
     elif [[ "$line" == *"</item>"* ]]; then
         item_content="$item_content$line"
         
-        # Extract title
-        title=$(echo "$item_content" | sed -n 's/.*<title>\(.*\)<\/title>.*/\1/p')
+        # Extract title (handles both plain text and CDATA)
+        title=$(echo "$item_content" | sed -n 's/.*<title[^>]*>\s*\(<!\[CDATA\[\)\?\s*\([^]<]*\)\s*\(\]\]>\)\?\s*<\/title>.*/\2/p' | head -1)
+        # Fallback to simpler pattern if CDATA pattern didn't match
+        if [ -z "$title" ]; then
+            title=$(echo "$item_content" | sed -n 's/.*<title[^>]*>\([^<]*\)<\/title>.*/\1/p' | head -1)
+        fi
         
         # Extract enclosure URL (audio file)
-        audio_url=$(echo "$item_content" | sed -n 's/.*<enclosure.*url="\([^"]*\)".*/\1/p')
+        audio_url=$(echo "$item_content" | sed -n 's/.*url="\([^"]*\)".*/\1/p' | head -1)
         
-        # Extract pubDate
-        pub_date=$(echo "$item_content" | sed -n 's/.*<pubDate>\(.*\)<\/pubDate>.*/\1/p')
+        # Extract pubDate (matches first occurrence only)
+        pub_date=$(echo "$item_content" | sed -n 's/.*<pubDate[^>]*>\([^<]*\)<\/pubDate>.*/\1/p' | head -1)
         
         # Process if we have all required fields
         if [ -n "$title" ] && [ -n "$audio_url" ] && [ -n "$pub_date" ]; then
