@@ -16,7 +16,7 @@ mkdir ~/bin
 pkg update -y
 pkg upgrade -y
 pkg install wget -y
-pkg install -y python ffmpeg nmap jq
+pkg install -y python ffmpeg nmap jq libxml2
 yes | pip install -U "yt-dlp[default]"
 
 # Download main scripts to home folder
