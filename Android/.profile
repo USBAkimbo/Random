@@ -15,3 +15,7 @@ alias dl="cd /storage/emulated/0/Download"
 
 # Update all packages
 alias update-all="pkg update -y && pkg upgrade -y && apt autoremove -y && pip install -U yt-dlp"
+
+# Additional DNS servers
+echo "nameserver 10.10.9.1" >> $PREFIX/etc/resolv.conf
+echo "nameserver 10.10.9.2" >> $PREFIX/etc/resolv.conf
