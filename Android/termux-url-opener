@@ -1,6 +1,8 @@
 #!/bin/bash
 clear
 url=$1
+dir="/storage/emulated/0/Download"
+
 echo "1) Download PKA/PKN"
 echo "2) Download MP3 from URL in best quality"
 echo "3) Download 360p YouTube video"
@@ -11,17 +13,20 @@ echo "7) Download video from any site as $(date +%Y-%m-%d--%H-%M-%S).mp4"
 read n
 
 if [ "$n" == '1' ]; then
-  ~/pka-downloader.sh $url
+  ~/pka-downloader.sh "$url"
 elif [ "$n" == '2' ]; then
-  ~/music-downloader.sh $url
+  ~/music-downloader.sh "$url"
 elif [ "$n" == '3' ]; then
-  yt-dlp -f "bestvideo[height<=360]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+  yt-dlp -f "bestvideo[height<=360]+bestaudio" -o "$dir/%(title)s.%(ext)s" "$url"
 elif [ "$n" == '4' ]; then
-  yt-dlp -f "bestvideo[height<=720]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+  yt-dlp -f "bestvideo[height<=720]+bestaudio" -o "$dir/%(title)s.%(ext)s" "$url"
 elif [ "$n" == '5' ]; then
-  yt-dlp -f "bestvideo[height<=1080]+bestaudio" -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+  yt-dlp -f "bestvideo[height<=1080]+bestaudio" -o "$dir/%(title)s.%(ext)s" "$url"
 elif [ "$n" == '6' ]; then
-  yt-dlp -o "/storage/emulated/0/Download/%(title)s.%(ext)s" $url
+  yt-dlp -o "$dir/%(title)s.%(ext)s" "$url"
 elif [ "$n" == '7' ]; then
-  yt-dlp -o "/storage/emulated/0/Download/tmpvid.mp4" $url && ffmpeg -i /storage/emulated/0/Download/tmpvid.mp4 "/storage/emulated/0/Download/$(date +'%Y-%m-%d--%H-%M-%S').mp4" && rm -f "/storage/emulated/0/Download/tmpvid.mp4"
+  yt-dlp -o "$dir/tmpvid.%(ext)s" "$url" && \
+  tmpfile=$(ls $dir/tmpvid.* 2>/dev/null | head -1) && \
+  ffmpeg -i "$tmpfile" "$dir/$(date +'%Y-%m-%d--%H-%M-%S').mp4" && \
+  rm -f "$tmpfile"
 fi
