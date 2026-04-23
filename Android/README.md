@@ -6,7 +6,7 @@
 - Termux URL opener for downloading YouTube videos at 360p, 720p and 1080p
 - Termux URL opener for downloading videos from any site that works with yt-dlp
 - Termux URL opener for downloading songs from anything that works with yt-dlp
-- Script to update all pkg and pip packages
+- Script to update all pkg and uv packages
 
 # Requirements
 - [F-Droid (alternate to Play Store)](https://f-droid.org/)
