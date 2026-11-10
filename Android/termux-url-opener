@@ -10,6 +10,7 @@ echo "4) Download 720p YouTube video"
 echo "5) Download 1080p YouTube video"
 echo "6) Download video from any site"
 echo "7) Download video from any site as $(date +%Y-%m-%d--%H-%M-%S).mp4"
+echo "8) Upload image to catbox.moe"
 read n
 
 if [ "$n" == '1' ]; then
@@ -29,4 +30,10 @@ elif [ "$n" == '7' ]; then
   tmpfile=$(ls $dir/tmpvid.* 2>/dev/null | head -1) && \
   ffmpeg -i "$tmpfile" "$dir/$(date +'%Y-%m-%d--%H-%M-%S').mp4" && \
   rm -f "$tmpfile"
+elif [ "$n" == '8' ]; then
+  link=$(curl -s -F reqtype=fileupload -F fileToUpload=@"$url" https://catbox.moe/user/api.php)
+  echo "$link"
+  # timeout: termux-clipboard-set hangs if the Termux:API app isn't installed
+  timeout 5 termux-clipboard-set "$link" 2>/dev/null && echo "Copied to clipboard"
+  read -p "Press enter to exit"
 fi
