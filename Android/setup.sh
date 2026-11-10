@@ -12,11 +12,11 @@ rm -f .profile*
 rm -rf ~/bin
 mkdir ~/bin
 
-# Install yt-dlp, FFmpeg, nmap and wget
+# Install yt-dlp, FFmpeg, nmap, wget, curl and termux-api (clipboard)
 pkg update -y
 pkg upgrade -y
 pkg install wget -y
-pkg install -y python ffmpeg nmap jq
+pkg install -y python ffmpeg nmap jq curl termux-api
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source "$HOME/.local/bin/env"
 uv tool install --upgrade "yt-dlp[default]"
@@ -33,6 +33,9 @@ mv termux-url-opener ~/bin/termux-url-opener
 # Make all scripts executable
 chmod +x ~/bin/termux-url-opener
 chmod +x *.sh
+
+# Shared files open termux-file-editor, so point it at the same menu
+ln -s ~/bin/termux-url-opener ~/bin/termux-file-editor
 
 # Setup termux storage
 termux-setup-storage
